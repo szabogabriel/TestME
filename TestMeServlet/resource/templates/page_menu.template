@@ -1,0 +1,14 @@
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="index">TEST.me</a>
+          </div>
+          <ul class="nav navbar-nav">
+          	{{#isLoggedIn}}<li {{#active-manage-tests}}class="active"{{/active-manage-tests}}><a href="manage-tests">Tests</a></li>{{/isLoggedIn}}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {{^isLoggedIn}}<li {{#active-login}}class="active"{{/active-login}}><a href="login">Login</a></li>{{/isLoggedIn}}
+            {{#isLoggedIn}}<li {{#active-logout}}class="active"{{/active-logout}}><a href="logout">Logout</a></li>{{/isLoggedIn}}
+          </ul>
+        </div>
+      </nav>

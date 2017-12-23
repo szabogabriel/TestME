@@ -1,0 +1,9 @@
+{{>page_start.template}}
+{{>page_menu.template}}
+
+      <h1>Ooops,</h1>
+      <p>something went wrong. Please try again.</p>
+      
+{{>login.form.template}}
+    
+{{>page_end.template}}

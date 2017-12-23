@@ -1,0 +1,22 @@
+{{>page_start.template}}
+{{>page_menu.template}}
+
+    <h2>Take our tests...</h2>
+    
+    <div class="col-md-offset-4 col-md-4">
+      <form action="test">
+        <div class="input-group">
+          <input id="email" type="text" class="form-control" name="email" placeholder="Email">
+        </div>
+        <div class="input-group">
+          <input id="msg" type="text" class="form-control" name="msg" placeholder="Age">
+        </div>
+        <div class="radio">
+          {{#tests}}<label><input type="radio" name="title" id="title" value="{{test_file}}"/>{{test_title}}</label><br/>
+          {{/tests}}
+        </div>
+        <button type="submit" class="btin btn-default">Generate</button>
+      </form>
+    </div>
+    
+{{>page_end.template}}

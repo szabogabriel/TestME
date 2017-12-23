@@ -1,0 +1,43 @@
+package me.test.servlet.viewmodel;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import me.test.test.Test;
+
+public class MainVM implements ViewModel {
+	
+	private Test[] tests = null;
+	
+	public void setTests(Test[] tests) {
+		this.tests = tests;
+	}
+
+	@Override
+	public Map<String, Object> provideData() {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		
+		ret.put("tests", getTestsData());
+		
+		return ret;
+	}
+	
+	private List<Map<String, Object>> getTestsData() {
+		List<Map<String, Object>> ret = new ArrayList<>();
+		
+		if (tests != null) {
+			Arrays.asList(tests).stream().forEach(t -> {
+				Map<String, Object> tmp = new HashMap<>();
+				tmp.put("test_file", t.getFileName());
+				tmp.put("test_title", t.getTitle());
+				ret.add(tmp);
+			});
+		}
+		
+		return ret;
+	}
+
+}

@@ -1,0 +1,24 @@
+{{>page_start.template}}
+{{>page_menu.template}}
+      <h1>{{test_title}}</h1>
+      <p>{{instructions}}</p>
+      <h2>Valaszlehetosegek</h2>
+      <p>
+        <ol>
+          {{#answers}}<li>{{answer_value}}</li>
+          {{/answers}}
+        </ol>
+        <div class="alert alert-warning" roler="alert">
+          <string>!!! </strong>{{answer_note}}
+        </div>
+      </p>
+      <h2>Kerdesek</h2>
+      <p>
+        <table class="table">
+          {{#questions}}<tr>
+            <td>{{question}}</td>
+            <td><select><option value="">-</option>{{#answers}}<option value="{{answer_value}}">{{answer_value}}</option>{{/answers}}</select></td>
+          </tr>{{/questions}}
+        </table>
+      </p>
+{{>page_end.template}}

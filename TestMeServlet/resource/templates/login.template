@@ -1,0 +1,6 @@
+{{>page_start.template}}
+{{>page_menu.template}}
+
+{{>login.form.template}}
+    
+{{>page_end.template}}
