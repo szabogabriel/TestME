@@ -1,5 +1,5 @@
 
-package me.test.test;
+package me.test.entity.test;
 
 import java.io.File;
 import java.io.FileInputStream;

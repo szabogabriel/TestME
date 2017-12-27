@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class TestTest {
 	
-	private static me.test.test.Test test;
+	private static me.test.entity.test.Test test;
 	
 	private static File file = new File("./test/me/test/test/probatest2.properties");
 	
@@ -54,7 +54,7 @@ public class TestTest {
 			e.printStackTrace();
 		}
 		
-		test = new me.test.test.Test(file);
+		test = new me.test.entity.test.Test(file);
 	}
 	
 	@Test

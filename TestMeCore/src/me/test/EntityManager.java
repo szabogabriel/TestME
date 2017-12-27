@@ -2,8 +2,8 @@ package me.test;
 
 import java.io.File;
 
-import me.test.test.TestsHolder;
-import me.test.user.UserHelper;
+import me.test.entity.test.TestsHolder;
+import me.test.entity.user.UserHelper;
 
 public class EntityManager {
 	

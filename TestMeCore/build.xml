@@ -1,0 +1,33 @@
+<project name="testMeCore" basedir="." default="build_src">
+	
+	<buildnumber file="build.number" />
+	<property file="build.properties" />
+	
+	<target name="clean_archive">
+		<delete file="${basedir}/${file.publish.prefix}_*" quiet="true" />
+	</target>
+	
+	<target name="clean_build">
+		<delete quiet="true">
+			<fileset dir="${dir.bin}" includes="**/*.class" />
+		</delete>
+	</target>
+	
+	<target name="clean_all" depends="clean_archive,clean_build" />
+		
+	<target name="build_src">
+		<javac srcdir="${dir.src}" destdir="${dir.bin}" />
+	</target>
+	
+	<target name="package">
+		<echo message="Generating ${basedir}/${file.publish.name}"/>
+		<jar destfile="${basedir}/${file.publish.name}" basedir="${dir.bin}" />
+		<eclipse.refreshLocal resource="${project.name}" depth="1" />
+	</target>
+		
+	<target name="publish_eclipse">
+		<copy file="${basedir}/${file.publish.prefix}*" todir="${dir.publish}" />
+		<eclipse.refreshLocal resource="${project.target}" depth="infinite" />
+	</target>
+	
+</project>

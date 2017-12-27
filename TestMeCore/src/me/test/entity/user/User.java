@@ -1,4 +1,4 @@
-package me.test.user;
+package me.test.entity.user;
 
 import java.io.File;
 import java.io.FileInputStream;

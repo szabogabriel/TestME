@@ -8,6 +8,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import me.test.entity.user.User;
+import me.test.entity.user.UserHelper;
+
 public class UserTest {
 	
 	private static final String USERNAME = "TestUser";
