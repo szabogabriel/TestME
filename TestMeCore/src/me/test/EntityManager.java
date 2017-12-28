@@ -2,18 +2,18 @@ package me.test;
 
 import java.io.File;
 
-import me.test.entity.test.TestsHolder;
-import me.test.entity.user.UserHelper;
+import me.test.entity.test.TestsEntity;
+import me.test.entity.user.UserEntity;
 
 public class EntityManager {
 	
-	private final TestsHolder TESTS_HOLDER;
+	private final TestsEntity TESTS_HOLDER;
 	
-	private final UserHelper USER_HELPER;
+	private final UserEntity USER_HELPER;
 	
 	public EntityManager(File testsFolder, File usersFolder) {
-			TESTS_HOLDER = new TestsHolder(testsFolder);
-			USER_HELPER = new UserHelper(usersFolder);
+			TESTS_HOLDER = new TestsEntity(testsFolder);
+			USER_HELPER = new UserEntity(usersFolder);
 	}
 	
 	

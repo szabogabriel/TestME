@@ -2,6 +2,7 @@ package me.test.usecase;
 
 import me.test.entity.EntityProvider;
 import me.test.usecase.login.LoginUC;
+import me.test.usecase.logout.LogoutUC;
 
 public class UseCaseProvider {
 	
@@ -13,6 +14,10 @@ public class UseCaseProvider {
 	
 	public LoginUC createLoginRequest() {
 		return new LoginUC(ENTITY_PROVIDER);
+	}
+	
+	public LogoutUC createLogoutRequest() {
+		return new LogoutUC(ENTITY_PROVIDER);
 	}
 
 }

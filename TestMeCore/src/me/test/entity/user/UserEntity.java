@@ -6,12 +6,12 @@ import java.util.Map;
 
 import me.test.tools.RandomUtility;
 
-public class UserHelper {
+public class UserEntity {
 	
 	private final Map<String, User> USERS = new HashMap<>();
 	private final File ROOT;
 	
-	public UserHelper(File rootFolderForUsers) {
+	public UserEntity(File rootFolderForUsers) {
 		if (rootFolderForUsers.exists() && rootFolderForUsers.isDirectory()) {
 			ROOT = rootFolderForUsers;
 			loadUsers();

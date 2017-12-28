@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TestsHolder {
+public class TestsEntity {
 	
 	private final List<Test> TESTS = new ArrayList<>();
 	
@@ -14,7 +14,7 @@ public class TestsHolder {
 	
 	private final File ROOT;
 	
-	public TestsHolder(File rootFolder) {
+	public TestsEntity(File rootFolder) {
 		ROOT = rootFolder;
 		reload();
 	}

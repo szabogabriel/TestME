@@ -1,4 +1,4 @@
-package me.test.user;
+package me.test.entity.user;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import me.test.entity.user.User;
-import me.test.entity.user.UserHelper;
+import me.test.entity.user.UserEntity;
 
 public class UserTest {
 	
@@ -21,7 +21,7 @@ public class UserTest {
 	
 	private static final File targetTempDir = new File("./test/me/test/user/");
 	
-	private static final UserHelper userHelper = new UserHelper(targetTempDir);
+	private static final UserEntity userHelper = new UserEntity(targetTempDir);
 	
 	@BeforeClass
 	public static void create() {
