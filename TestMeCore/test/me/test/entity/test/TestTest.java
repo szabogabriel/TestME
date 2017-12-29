@@ -16,7 +16,7 @@ public class TestTest {
 	
 	private static me.test.entity.test.Test test;
 	
-	private static File file = new File("./test/me/test/test/probatest2.properties");
+	private static File file = new File("./test/me/test/entity/test/probatest2.properties");
 	
 	@BeforeClass
 	public static void init() throws FileNotFoundException, IOException {
@@ -39,14 +39,14 @@ public class TestTest {
 				.append("question.4=Question 4\n")
 				.append("question.5=Question 5\n")
 
-				.append("answerType.name.1=One")
-				.append("answerType.name.2=Two")
+				.append("answerType.name.1=One\n")
+				.append("answerType.name.2=Two\n")
 				
 				.append("answerType.questions.1=2n,5\n")
 				.append("answerType.questions.2=1,3,4\n")
 
-				.append("answerType.description.1=DescriptionOne")
-				.append("answerType.description.2=DescriptionTwo")
+				.append("answerType.description.1=DescriptionOne\n")
+				.append("answerType.description.2=DescriptionTwo\n")
 				;
 			
 			out.write(sb.toString());

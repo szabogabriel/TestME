@@ -26,15 +26,17 @@ public class Test {
 	
 	private final Properties TEST_VALUES = new Properties();
 	
+	private final String name;
 	private final String fileName;
 	
 	public Test(File file) throws FileNotFoundException, IOException {
 		TEST_VALUES.load(new FileInputStream(file));
-		fileName = file.getName().substring(0, file.getName().indexOf("."));
+		fileName = file.getName();
+		this.name = fileName.substring(0, file.getName().indexOf("."));
 	}
 	
 	public String getName() {
-		return getFileName();
+		return name;
 	}
 	
 	public String getFileName() {
@@ -62,7 +64,7 @@ public class Test {
 	}
 	
 	public String[] getQuestions(String answerTypeName) {
-		String key = PREFIX_ANSWER_TYPE_NAME + answerTypeName;
+		String key = PREFIX_ANSWER_TYPE_QUESTIONS + findAnswerTypeIndex(answerTypeName);
 		String [] values = TEST_VALUES.getProperty(key, "").split(",");
 		List<String> ret = new ArrayList<>();
 		
@@ -84,7 +86,7 @@ public class Test {
 		while (enums.hasMoreElements()) {
 			String tmp = enums.nextElement().toString();
 			if (tmp.startsWith(PREFIX_ANSWER_TYPE_NAME)) {
-				values.add(tmp.substring(PREFIX_ANSWER_TYPE_NAME.length()));
+				values.add(TEST_VALUES.getProperty(tmp));
 			}
 		}
 		

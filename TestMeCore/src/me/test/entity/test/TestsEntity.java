@@ -42,16 +42,16 @@ public class TestsEntity {
 		return ACTIVE.stream().toArray(Test[]::new);
 	}
 	
-	public Test getTest(String fileName) {
-		return TESTS.stream().filter(t -> t.getFileName().equals(fileName)).findAny().orElse(null);
+	public Test getTest(String name) {
+		return TESTS.stream().filter(t -> t.getName().equals(name)).findAny().orElse(null);
 	}
 	
 	public boolean isKnownTest(String name) {
-		return TESTS.stream().filter(t -> t.getFileName().equals(name)).findAny().isPresent();
+		return TESTS.stream().filter(t -> t.getName().equals(name)).findAny().isPresent();
 	}
 	
 	public boolean isActiveTest(String name) {
-		return ACTIVE.stream().filter(t -> t.getFileName().equals(name)).findAny().isPresent();
+		return ACTIVE.stream().filter(t -> t.getName().equals(name)).findAny().isPresent();
 	}
 	
 	public void activate(Test test) {
