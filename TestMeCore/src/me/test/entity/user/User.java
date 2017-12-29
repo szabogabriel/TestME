@@ -5,16 +5,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
+
+import me.test.tools.Hashing;
 
 public class User {
 
 	private final String USERNAME;
 	private final String SALT;
 	private final String PASSWORD_HASH;
-	private MessageDigest messageDigest = null;
 
 	public User(String username, String salt, String password) {
 		if (username == null || salt == null || password == null) {
@@ -23,7 +22,7 @@ public class User {
 
 		this.USERNAME = username;
 		this.SALT = salt;
-		this.PASSWORD_HASH = md5(password + salt);
+		this.PASSWORD_HASH = Hashing.md5(password + salt);
 	}
 
 	public User(File file) {
@@ -64,39 +63,11 @@ public class User {
 		}
 	}
 
-	public boolean matches(String password) {
+	public boolean matchesPassword(String password) {
 		boolean ret = false;
 		if (password != null)
-			ret = md5(password + SALT).equals(PASSWORD_HASH);
+			ret = Hashing.md5(password + SALT).equals(PASSWORD_HASH);
 		return ret;
-	}
-
-	private String md5(String data) {
-		byte[] retArray = getMessageDigest().digest(data.getBytes());
-
-		StringBuilder ret = new StringBuilder();
-
-		for (int i = 0; i < retArray.length; i++) {
-			String hex = Integer.toHexString(0xff & retArray[i]);
-			if (hex.length() == 1) {
-				ret.append('0');
-			}
-			ret.append(hex);
-		}
-
-		return ret.toString();
-	}
-
-	private MessageDigest getMessageDigest() {
-		if (messageDigest == null) {
-			try {
-				messageDigest = MessageDigest.getInstance("MD5");
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return messageDigest;
 	}
 
 	@Override

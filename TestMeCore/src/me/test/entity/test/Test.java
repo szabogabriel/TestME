@@ -33,6 +33,10 @@ public class Test {
 		fileName = file.getName().substring(0, file.getName().indexOf("."));
 	}
 	
+	public String getName() {
+		return getFileName();
+	}
+	
 	public String getFileName() {
 		return fileName;
 	}

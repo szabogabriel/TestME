@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.test.test.Test;
+import me.test.entity.test.Test;
 
 public class MainVM implements ViewModel {
 	

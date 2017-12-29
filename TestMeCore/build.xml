@@ -1,33 +1,61 @@
-<project name="testMeCore" basedir="." default="build_src">
+<project name="testMeCore" basedir="." default="info">
 	
-	<buildnumber file="build.number" />
-	<property file="build.properties" />
-	
-	<target name="clean_archive">
-		<delete file="${basedir}/${file.publish.prefix}_*" quiet="true" />
+	<target name="info">
+		<echo message="Running build in dir ${basedir}" />
 	</target>
 	
-	<target name="clean_build">
+	<target name="init" unless="init.performed">
+		<buildnumber file="build.number" />
+		
+		<property name="version" value="0.1" />
+	
+		<property name="project.target" value="TestMeServlet" />
+		<property name="project.name" value="TestMeCore" />
+	
+		<property name="dir.src" value="${basedir}/src" />
+		<property name="dir.bin" value="${basedir}/bin" />
+		<property name="dir.test" value="${basedir}/test" />
+		<property name="dir.publish" value="${basedir}/../${TestMeServlet}/WebContent/WEB-INF/lib" />
+			
+		<property name="file.publish.prefix" value="TestMeCore" />
+		<property name="file.publish.postfix" value="jar" />
+		<property name="file.publish.name" value="${file.publish.prefix}_${version}_${build.number}.${file.publish.postfix}" />
+		
+		<property name="init.performed" value="true" />
+	</target>
+	
+	<target name="clean_archive" depends="init">
+		<delete quiet="true">
+			<fileset dir="${basedir}" includes="${file.publish.prefix}_*jar" />
+		</delete>
+	</target>
+	
+	<target name="clean_build" depends="init">
 		<delete quiet="true">
 			<fileset dir="${dir.bin}" includes="**/*.class" />
 		</delete>
 	</target>
 	
-	<target name="clean_all" depends="clean_archive,clean_build" />
+	<target name="clean_all" depends="init,clean_archive,clean_build" />
 		
 	<target name="build_src">
 		<javac srcdir="${dir.src}" destdir="${dir.bin}" />
 	</target>
 	
-	<target name="package">
+	<target name="package" depends="init">
 		<echo message="Generating ${basedir}/${file.publish.name}"/>
 		<jar destfile="${basedir}/${file.publish.name}" basedir="${dir.bin}" />
-		<eclipse.refreshLocal resource="${project.name}" depth="1" />
 	</target>
 		
-	<target name="publish_eclipse">
+	<target name="publish_eclipse" depends="init">
 		<copy file="${basedir}/${file.publish.prefix}*" todir="${dir.publish}" />
-		<eclipse.refreshLocal resource="${project.target}" depth="infinite" />
+	</target>
+	
+	<target name="all" depends="init">
+		<antcall target="clean_archive" />
+		<antcall target="clean_build" />
+		<antcall target="build_src" />
+		<antcall target="package" />
 	</target>
 	
 </project>

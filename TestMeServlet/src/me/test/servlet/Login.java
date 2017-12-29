@@ -11,10 +11,10 @@ import javax.servlet.http.HttpSession;
 import com.jmtemplate.Template;
 
 import me.test.Main;
+import me.test.entity.user.User;
 import me.test.servlet.viewmodel.LoginVM;
 import me.test.template.TemplateLoader;
-import me.test.user.User;
-import me.test.user.UserHelper;
+import me.test.usecase.user.credentials.AuthenticateUserRequestData;
 
 @WebServlet("/login")
 public class Login extends BasicServlet {
@@ -50,11 +50,9 @@ public class Login extends BasicServlet {
 		String username = getUsername(request);
 		String password = getPassword(request);
 		
-		UserHelper uh = Main.INSTANCE.getUserHelper();
-		
 		HttpSession session = null;
 		
-		if (uh.isCredentialCorrect(username, password)) {
+		if (checkCredentials(username, password)) {
 			session = request.getSession();
 			session.setAttribute("username", username);
 			if (!request.getParameterMap().containsKey("rememberme")) {
@@ -68,6 +66,19 @@ public class Login extends BasicServlet {
 			vm.setUsername(username);
 			response.getWriter().print(TEMPLATE_LOGIN_SUCCESS.render(vm.provideData()));
 		}
+	}
+	
+	private boolean checkCredentials(String username, String password) {
+		return Main.INSTANCE.getAuthenticateUserUC().isCredentialsCorrect(new AuthenticateUserRequestData() {
+			@Override
+			public String getUserName() {
+				return username;
+			}
+			@Override
+			public String getPassword() {
+				return password;
+			}
+		}).result();
 	}
 	
 	private String getUsername(HttpServletRequest request) {

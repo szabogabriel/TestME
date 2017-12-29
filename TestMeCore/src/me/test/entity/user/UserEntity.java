@@ -27,7 +27,7 @@ public class UserEntity {
 	}
 	
 	public boolean isCredentialCorrect(String username, String password) {
-		return getUser(username).matches(password);
+		return getUser(username).matchesPassword(password);
 	}
 	
 	public User getUser(String username) {
@@ -39,8 +39,10 @@ public class UserEntity {
 	
 	private void loadUsers() {
 		for (File it : ROOT.listFiles()) {
-			User tmp = new User(it);
-			USERS.put(tmp.getUsername(), tmp);
+			if (it.getName().endsWith(".properties")) {
+				User tmp = new User(it);
+				USERS.put(tmp.getUsername(), tmp);
+			}
 		}
 	}
 	

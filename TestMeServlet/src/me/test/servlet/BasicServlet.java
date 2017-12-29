@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import me.test.Main;
+import me.test.entity.user.User;
 import me.test.session.SessionUtils;
-import me.test.user.User;
 
 public abstract class BasicServlet extends HttpServlet {
 
@@ -42,7 +42,7 @@ public abstract class BasicServlet extends HttpServlet {
 		User user = null;
 		
 		if (SessionUtils.isLoggedIn(userData)) {
-			user = Main.INSTANCE.getUserHelper().getUser(userData.get("username").toString());
+			user = Main.INSTANCE.getQueryUserUC().getUser(() -> userData.get("username").toString()).getUser();
 		}
 		return user;
 	}
