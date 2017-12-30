@@ -16,7 +16,7 @@ public class LoginVM implements ViewModel {
 	public void setSuccessful(boolean successful) {
 		this.successful = successful;
 	}
-
+	
 	@Override
 	public Map<String, Object> provideData() {
 		Map<String, Object> ret = new HashMap<>();

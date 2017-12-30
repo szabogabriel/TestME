@@ -64,6 +64,7 @@ public class Login extends BasicServlet {
 			response.getWriter().print(TEMPLATE_LOGIN_ERROR.render(vm.provideData()));
 		} else {
 			vm.setUsername(username);
+			vm.setSuccessful(true);
 			response.getWriter().print(TEMPLATE_LOGIN_SUCCESS.render(vm.provideData()));
 		}
 	}

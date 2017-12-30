@@ -30,7 +30,12 @@ public class MainServlet extends BasicServlet {
 	@Override
 	void doGetLoggedIn(HttpServletRequest request, HttpServletResponse response, User user) throws ServletException, IOException  {
 		//TODO - control view of the logged in user.
-		response.sendRedirect("index");
+		MainVM viewModel = new MainVM();
+		
+		viewModel.setTests(getActiveTests());
+		viewModel.setLoggedIn(true);
+		
+		response.getWriter().append(TEMPLATE.render(viewModel.provideData()));
 	}
 
 	@Override

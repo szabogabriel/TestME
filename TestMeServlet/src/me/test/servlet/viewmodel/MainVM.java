@@ -12,8 +12,14 @@ public class MainVM implements ViewModel {
 	
 	private Test[] tests = null;
 	
+	private boolean loggedIn = false;
+	
 	public void setTests(Test[] tests) {
 		this.tests = tests;
+	}
+	
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
 	}
 
 	@Override
@@ -21,6 +27,7 @@ public class MainVM implements ViewModel {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		
 		ret.put("tests", getTestsData());
+		ret.put("isLoggedIn", loggedIn);
 		
 		return ret;
 	}
