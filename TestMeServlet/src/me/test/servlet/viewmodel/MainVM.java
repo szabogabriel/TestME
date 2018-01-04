@@ -36,11 +36,13 @@ public class MainVM implements ViewModel {
 		List<Map<String, Object>> ret = new ArrayList<>();
 		
 		if (tests != null) {
-			Arrays.asList(tests).stream().forEach(t -> {
-				Map<String, Object> tmp = new HashMap<>();
-				tmp.put("test_name", t.getName());
-				ret.add(tmp);
-			});
+			Arrays.asList(tests).stream()
+				.forEach(t -> {
+					Map<String, Object> tmp = new HashMap<>();
+					tmp.put("test_name", t.getName());
+					ret.add(tmp);
+				}
+			);
 		}
 		
 		return ret;

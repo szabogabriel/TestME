@@ -40,6 +40,7 @@ public class TestsEntity {
 		
 		if (activeFile.exists()) {
 			IOUtils.readFilesByLine(activeFile).stream()
+				.filter(f -> f != null && f.length() > 0)
 				.map(t -> getTestByFileName(t))
 				.forEach(t -> ACTIVE.add(t));
 		}
