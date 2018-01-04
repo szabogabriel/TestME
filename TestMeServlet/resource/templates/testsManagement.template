@@ -1,0 +1,17 @@
+{{>page_start.template}}
+{{>page_menu.template}}
+
+    <h2>Set the active tests</h2>
+    
+    <div class="col-md-offset-4 col-md-4">
+      <form action="testsManagement" method="post">
+        {{#tests}}
+	        <div class="checkbox">
+	          <label><input type="checkbox" name="{{test_name}}" {{#test_active}} checked="on"{{/test_active}}/>{{test_name}}</label><br/>
+	        </div>
+        {{/tests}}
+        <button type="submit" class="btin btn-default">Update</button>
+      </form>
+    </div>
+    
+{{>page_end.template}}

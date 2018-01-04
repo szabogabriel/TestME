@@ -31,8 +31,12 @@ public class QueryString {
 		props.put(key, val);
 	}
 	
-	public boolean knownKey(String key) {
+	public boolean isKnownKey(String key) {
 		return props.containsKey(key);
+	}
+	
+	public boolean isKnownKeyAndHaveValue(String key) {
+		return isKnownKey(key) && (getValue(key) != null);
 	}
 	
 	public String getValue(String key) {

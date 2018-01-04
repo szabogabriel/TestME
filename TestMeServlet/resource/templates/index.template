@@ -12,7 +12,7 @@
           <input id="msg" type="text" class="form-control" name="msg" placeholder="Age">
         </div>
         <div class="radio">
-          {{#tests}}<label><input type="radio" name="title" id="title" value="{{test_file}}"/>{{test_title}}</label><br/>
+          {{#tests}}<label><input type="radio" name="title" id="title" value="{{test_name}}"/>{{test_name}}</label><br/>
           {{/tests}}
         </div>
         <button type="submit" class="btin btn-default">Generate</button>

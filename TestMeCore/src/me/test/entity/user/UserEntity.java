@@ -21,9 +21,35 @@ public class UserEntity {
 	}
 	
 	public void createUser(String username, String password) {
-		String salt = RandomUtility.generateSalt();
-		User user = new User(username, salt, password);
-		user.persist(ROOT);
+		if (!isKnownUsername(username)) {
+			String salt = RandomUtility.generateSalt();
+			User user = new User(username, salt, password);
+			user.persist(ROOT);
+		}
+	}
+	
+	public boolean deleteUser(User user) {
+		boolean ret = false;
+		if (user != null) {
+			File oldUserFile = new File(ROOT.getAbsolutePath() + "/" + user.getUsername() + ".properties");
+			if (oldUserFile.exists()) {
+				try {
+					ret = oldUserFile.delete();
+					USERS.remove(user.getUsername());
+				} catch (Exception e) {
+					e.printStackTrace();
+					ret = false;
+				}
+			}
+		}
+		return ret;
+	}
+	
+	public boolean isKnownUsername(String username) {
+		if (!USERS.containsKey(username)) {
+			loadUser(username);
+		}
+		return USERS.containsKey(username);
 	}
 	
 	public boolean isCredentialCorrect(String username, String password) {

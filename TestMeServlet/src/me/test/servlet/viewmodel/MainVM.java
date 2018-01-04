@@ -38,8 +38,7 @@ public class MainVM implements ViewModel {
 		if (tests != null) {
 			Arrays.asList(tests).stream().forEach(t -> {
 				Map<String, Object> tmp = new HashMap<>();
-				tmp.put("test_file", t.getFileName());
-				tmp.put("test_title", t.getTitle());
+				tmp.put("test_name", t.getName());
 				ret.add(tmp);
 			});
 		}

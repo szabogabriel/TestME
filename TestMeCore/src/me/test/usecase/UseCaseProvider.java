@@ -4,6 +4,8 @@ import me.test.entity.EntityProvider;
 import me.test.usecase.test.activate.ActivateTestUC;
 import me.test.usecase.test.answer.TestAnswerUC;
 import me.test.usecase.test.list.QueryTestsUC;
+import me.test.usecase.user.changepassword.ChangePasswordUC;
+import me.test.usecase.user.create.CreateUserUC;
 import me.test.usecase.user.credentials.AuthenticateUserUC;
 import me.test.usecase.user.list.QueryUserUC;
 
@@ -33,6 +35,14 @@ public class UseCaseProvider {
 	
 	public QueryUserUC createQueryUserUC() {
 		return new QueryUserUC(ENTITY_PROVIDER);
+	}
+	
+	public CreateUserUC createCreateUserUC() {
+		 return new CreateUserUC(ENTITY_PROVIDER);
+	}
+	
+	public ChangePasswordUC createChangePasswordUC() {
+		return new ChangePasswordUC(ENTITY_PROVIDER);
 	}
 	
 }

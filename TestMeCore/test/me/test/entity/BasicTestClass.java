@@ -18,23 +18,30 @@ public class BasicTestClass implements EntityProviderInitData {
 	public static final String USER1_SALT = "Keps4";
 	public static final String USER1_HASH = "2ec58c88ad5b267c6a00175161cb6c4b";
 	public static final String USER1_PSWD = "admin";
+	public static final String USER1_NEWPSSWD = "admin2";
 	
 	public static final EntityProvider ENTITY_PROVIDER = new EntityProvider(new BasicTestClass());;
 	public static final UseCaseProvider USE_CASE_PROVIDER = new UseCaseProvider(ENTITY_PROVIDER);
 	
 	protected static void prepareUsersFolder() {
+		prepareUsersFolder(true);
+	}
+	
+	protected static void prepareUsersFolder(boolean createUser) {
 		if (!TARGET_DIR_USERS.exists()) {
 			TARGET_DIR_USERS.mkdirs();
 		}
 		
-		Properties p = new Properties();
-		p.put("username", USER1_NAME);
-		p.put("salt", USER1_SALT);
-		p.put("passwordHash", USER1_HASH);
-		try (FileOutputStream fos = new FileOutputStream(new File(TARGET_DIR_USERS.getAbsolutePath() + "/admin.properties"))) {
-			p.store(fos, "");
-		} catch (Exception e) {
-			
+		if (createUser) {
+			Properties p = new Properties();
+			p.put("username", USER1_NAME);
+			p.put("salt", USER1_SALT);
+			p.put("passwordHash", USER1_HASH);
+			try (FileOutputStream fos = new FileOutputStream(new File(TARGET_DIR_USERS.getAbsolutePath() + "/admin.properties"))) {
+				p.store(fos, "");
+			} catch (Exception e) {
+				
+			}
 		}
 	}
 	

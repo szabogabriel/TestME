@@ -31,7 +31,7 @@ public class TestServlet extends BasicServlet {
 
 	private Test getTest(QueryString queryString) {
 		Test ret = null;
-		if (queryString.knownKey("title")) {
+		if (queryString.isKnownKeyAndHaveValue("title")) {
 			String testName = queryString.getValue("title");
 			
 			List<Test> tests = Main.INSTANCE.getQueryTestsUC().getTests(new QueryTestsRequestData() {

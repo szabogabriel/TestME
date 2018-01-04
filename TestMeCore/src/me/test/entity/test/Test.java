@@ -32,7 +32,7 @@ public class Test {
 	public Test(File file) throws FileNotFoundException, IOException {
 		TEST_VALUES.load(new FileInputStream(file));
 		fileName = file.getName();
-		this.name = fileName.substring(0, file.getName().indexOf("."));
+		this.name = fileName.substring(0, file.getName().lastIndexOf("."));
 	}
 	
 	public String getName() {

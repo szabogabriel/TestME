@@ -24,12 +24,19 @@ public class TestVM implements ViewModel {
 	private Map<String, Object> getTestData() {
 		Map<String, Object> ret = new HashMap<>();
 		
-		ret.put("test_title", test.getTitle());
-		ret.put("instructions", test.getInstructions());
-		ret.put("answer_note", test.getAnswerNote());
-		ret.put("answers", getAnswers());
-		ret.put("answer_types", getAnswerTypes());
-		ret.put("questions", getQuestions());
+		if (test != null) {
+			ret.put("test_set", Boolean.TRUE);
+			ret.put("test_title", test.getTitle());
+			ret.put("instructions", test.getInstructions());
+			ret.put("test_name", test.getName());
+			ret.put("answer_note_present", test.getAnswerNote() != null && test.getAnswerNote().length() > 0);
+			ret.put("answer_note", test.getAnswerNote());
+			ret.put("answers", getAnswers());
+			ret.put("answer_types", getAnswerTypes());
+			ret.put("questions", getQuestions());
+		} else {
+			ret.put("test_set", Boolean.FALSE);
+		}
 		
 		return ret;
 	}

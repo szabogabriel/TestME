@@ -4,7 +4,7 @@
             <a class="navbar-brand" href="index">TEST.me</a>
           </div>
           <ul class="nav navbar-nav">
-          	{{#isLoggedIn}}<li {{#active-manage-tests}}class="active"{{/active-manage-tests}}><a href="manage-tests">Tests</a></li>{{/isLoggedIn}}
+          	{{#isLoggedIn}}<li {{#active-manage-tests}}class="active"{{/active-manage-tests}}><a href="testsManagement">Tests management</a></li>{{/isLoggedIn}}
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {{^isLoggedIn}}<li {{#active-login}}class="active"{{/active-login}}><a href="login">Login</a></li>{{/isLoggedIn}}
