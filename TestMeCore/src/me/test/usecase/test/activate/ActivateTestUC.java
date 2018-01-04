@@ -14,7 +14,7 @@ public class ActivateTestUC {
 	public ActivateTestResponseData activate(ActivateTestRequestData request) {
 		try {
 			TestsEntity te = ENTITY_PROVIDER.getTestEntity();
-			te.activate(te.getTest(request.getTestCaseName()));
+			te.activate(te.getTestByName(request.getTestCaseName()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return () -> Boolean.FALSE;

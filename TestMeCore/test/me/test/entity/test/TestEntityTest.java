@@ -1,8 +1,10 @@
 package me.test.entity.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,12 +16,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import me.test.tools.IOUtils;
+
 public class TestEntityTest {
 	
 	private static final String TEST_NAME = "probatest";
 	
 	private static File targetDir = new File("./test/me/test/entity/test");
 	private static File targetFile = new File(targetDir.getAbsolutePath() + "/" + TEST_NAME + ".properties");
+	private static File activeFile = new File(targetDir.getAbsolutePath() + "/.active");
 	
 	@BeforeClass
 	public static void init() throws FileNotFoundException, IOException {
@@ -71,14 +76,17 @@ public class TestEntityTest {
 	public void testTestsEntityActivateDeactivate() {
 		TestsEntity te = new TestsEntity(targetDir);
 		
-		te.activate(te.getTest(TEST_NAME));
+		te.activate(te.getTestByName(TEST_NAME));
 		
+		assertTrue(activeFile.exists());
+		assertNotEquals(Long.valueOf(0L), Long.valueOf(activeFile.length()));
 		assertTrue(te.isActiveTest(TEST_NAME));
 		assertEquals(te.getActiveTests().length, 1);
 		
-		te.deactivate(te.getTest(TEST_NAME));
+		te.deactivate(te.getTestByName(TEST_NAME));
 		
 		assertFalse(te.isActiveTest(TEST_NAME));
+		assertNull(IOUtils.readFilesByLine(activeFile).stream().map(f -> te.getTestByFileName(f)).filter(t -> t.getName().equals(TEST_NAME)).findAny().orElse(null));
 	}
 	
 	@AfterClass
