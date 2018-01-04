@@ -92,6 +92,7 @@ public class TestEntityTest {
 	@AfterClass
 	public static void cleanup() {
 		targetFile.delete();
+		activeFile.delete();
 	}
 
 }
