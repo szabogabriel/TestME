@@ -42,7 +42,7 @@ public abstract class BasicServlet extends HttpServlet {
 		User user = null;
 		
 		if (SessionUtils.isLoggedIn(userData)) {
-			user = Main.INSTANCE.getQueryUserUC().getUser(() -> userData.get("username").toString()).getUser();
+			user = Main.INSTANCE.getQueryUserUC().getUser(() -> userData.get("username").toString()).getUser().get(0);
 		}
 		return user;
 	}

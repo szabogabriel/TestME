@@ -1,7 +1,6 @@
 package me.test.entity.test;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,9 +10,7 @@ import me.test.tools.IOUtils;
 
 public class TestsEntity {
 	
-	private final List<Test> TESTS = new ArrayList<>();
-	
-	private final Set<Test> ACTIVE = new HashSet<>();
+	private final Set<Test> TESTS = new HashSet<>();
 	
 	private final File ROOT;
 	
@@ -24,7 +21,6 @@ public class TestsEntity {
 	
 	public void reload() {
 		TESTS.clear();
-		ACTIVE.clear();
 		
 		for (File it : ROOT.listFiles()) {
 			if (it.getName().endsWith("properties")) {
@@ -40,9 +36,8 @@ public class TestsEntity {
 		
 		if (activeFile.exists()) {
 			IOUtils.readFilesByLine(activeFile).stream()
-				.filter(f -> f != null && f.length() > 0)
-				.map(t -> getTestByFileName(t))
-				.forEach(t -> ACTIVE.add(t));
+				.filter(t -> getTestByFileName(t) != Test.NULL_OBJECT)
+				.forEach(t -> getTestByFileName(t).setActive(true));
 		}
 	}
 	
@@ -51,15 +46,15 @@ public class TestsEntity {
 	}
 	
 	public Test[] getActiveTests() {
-		return ACTIVE.stream().toArray(Test[]::new);
+		return TESTS.stream().filter(t -> t.isActive()).toArray(Test[]::new);
 	}
 	
 	public Test getTestByFileName(String fileName) {
-		return TESTS.stream().filter(t -> t.getFileName().equals(fileName)).findAny().orElse(null);
+		return TESTS.stream().filter(t -> t.getFileName().equals(fileName)).findAny().orElse(Test.NULL_OBJECT);
 	}
 	
 	public Test getTestByName(String name) {
-		return TESTS.stream().filter(t -> t.getName().equals(name)).findAny().orElse(null);
+		return TESTS.stream().filter(t -> t.getName().equals(name)).findAny().orElse(Test.NULL_OBJECT);
 	}
 	
 	public boolean isKnownTest(String name) {
@@ -67,21 +62,32 @@ public class TestsEntity {
 	}
 	
 	public boolean isActiveTest(String name) {
-		return ACTIVE.stream().filter(t -> t.getName().equals(name)).findAny().isPresent();
+		return getTestByName(name).isActive();
 	}
 	
 	public void activate(Test test) {
-		if (!ACTIVE.contains(test)) {
-			ACTIVE.add(test);
-			IOUtils.writeFile(getActivateFile(), test.getFileName(), true);
-		}
+		test.setActive(true);
+		TESTS.add(test);
+		updateActivateFile();
+	}
+	
+	public void activate(List<Test> tests) {
+		tests.stream().forEach(t -> activate(t));
 	}
 	
 	public void deactivate(Test test) {
-		if (ACTIVE.contains(test)) {
-			ACTIVE.remove(test);
-			IOUtils.writeFile(getActivateFile(), ACTIVE.stream().map(t -> t.getFileName()).collect(Collectors.joining(System.lineSeparator())));
-		}
+		test.setActive(false);
+		TESTS.add(test);
+		updateActivateFile();
+	}
+	
+	public void deactivate() {
+		TESTS.stream().forEach(t -> t.setActive(false));
+		getActivateFile().delete();
+	}
+	
+	private void updateActivateFile() {
+		IOUtils.writeFile(getActivateFile(), TESTS.stream().filter(t -> t.isActive()).map(t -> t.getFileName()).collect(Collectors.joining(System.lineSeparator())));
 	}
 	
 	private File getActivateFile() {

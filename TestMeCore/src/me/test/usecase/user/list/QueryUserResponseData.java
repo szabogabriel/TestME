@@ -1,9 +1,11 @@
 package me.test.usecase.user.list;
 
+import java.util.List;
+
 import me.test.entity.user.User;
 
 public interface QueryUserResponseData {
 	
-	User getUser();
+	List<User> getUser();
 
 }

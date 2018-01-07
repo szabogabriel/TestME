@@ -7,6 +7,7 @@ import me.test.usecase.test.list.QueryTestsUC;
 import me.test.usecase.user.changepassword.ChangePasswordUC;
 import me.test.usecase.user.create.CreateUserUC;
 import me.test.usecase.user.credentials.AuthenticateUserUC;
+import me.test.usecase.user.forcepassword.ForcePasswordUC;
 import me.test.usecase.user.list.QueryUserUC;
 
 public class UseCaseProvider {
@@ -43,6 +44,10 @@ public class UseCaseProvider {
 	
 	public ChangePasswordUC createChangePasswordUC() {
 		return new ChangePasswordUC(ENTITY_PROVIDER);
+	}
+	
+	public ForcePasswordUC createForcePasswordUC() {
+		return new ForcePasswordUC(ENTITY_PROVIDER);
 	}
 	
 }

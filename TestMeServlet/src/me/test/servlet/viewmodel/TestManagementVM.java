@@ -13,6 +13,7 @@ public class TestManagementVM implements ViewModel {
 	
 	private Set<Test> tests = new HashSet<>();
 	private Set<Test> activeTests = new HashSet<>();
+	private String username = null;
 	
 	public void add(Test test) {
 		tests.add(test);
@@ -45,6 +46,10 @@ public class TestManagementVM implements ViewModel {
 	public void deactivate(List<Test> tests) {
 		this.activeTests.removeAll(tests);
 	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	@Override
 	public Map<String, Object> provideData() {
@@ -52,6 +57,7 @@ public class TestManagementVM implements ViewModel {
 		
 		ret.put("active-manage-tests", Boolean.TRUE);
 		ret.put("isLoggedIn", Boolean.TRUE);
+		ret.put("loggedIn-username", username);
 		ret.put("tests", createTestsData());
 		
 		return ret;

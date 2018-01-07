@@ -1,6 +1,6 @@
 {{>page_start.template}}
 {{>page_menu.template}}
 
-      <h1>Welcome, {{username}}</h1>
+      <h1>Welcome, {{loggedIn-username}}</h1>
     
 {{>page_end.template}}

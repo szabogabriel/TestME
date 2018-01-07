@@ -9,7 +9,9 @@ import me.test.usecase.UseCaseProvider;
 import me.test.usecase.test.activate.ActivateTestUC;
 import me.test.usecase.test.answer.TestAnswerUC;
 import me.test.usecase.test.list.QueryTestsUC;
+import me.test.usecase.user.create.CreateUserUC;
 import me.test.usecase.user.credentials.AuthenticateUserUC;
+import me.test.usecase.user.forcepassword.ForcePasswordUC;
 import me.test.usecase.user.list.QueryUserUC;
 
 public class Main implements EntityProviderInitData {
@@ -48,6 +50,10 @@ public class Main implements EntityProviderInitData {
 		return USE_CASE_PROVIDER.createActivateTestUC();
 	}
 	
+	public CreateUserUC getCreateUserUC() {
+		return USE_CASE_PROVIDER.createCreateUserUC();
+	}
+	
 	public TestAnswerUC getTestAnswerUC() {
 		return USE_CASE_PROVIDER.createTestAnswerUC();
 	}
@@ -58,5 +64,9 @@ public class Main implements EntityProviderInitData {
 	
 	public QueryUserUC getQueryUserUC() {
 		return USE_CASE_PROVIDER.createQueryUserUC();
+	}
+	
+	public ForcePasswordUC getForcePasswordUC() {
+		return USE_CASE_PROVIDER.createForcePasswordUC();
 	}
 }

@@ -2,7 +2,9 @@ package me.test.entity.user;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import me.test.tools.RandomUtility;
 
@@ -25,6 +27,7 @@ public class UserEntity {
 			String salt = RandomUtility.generateSalt();
 			User user = new User(username, salt, password);
 			user.persist(ROOT);
+			loadUsers();
 		}
 	}
 	
@@ -61,6 +64,10 @@ public class UserEntity {
 			loadUser(username);
 		}
 		return USERS.get(username);
+	}
+	
+	public List<User> getUsers() {
+		return USERS.values().stream().collect(Collectors.toList());
 	}
 	
 	private void loadUsers() {

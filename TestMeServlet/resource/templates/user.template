@@ -1,0 +1,30 @@
+{{>page_start.template}}
+{{>page_menu.template}}
+      <h1>Manage users</h1>
+	  <p>
+	    <table class="table">
+	      <tr>
+	        <th>Username</th>
+	        <th>Password</th>
+	        <th>Check password</th>
+	        <th/>
+	      </tr>
+	      {{#users}}
+	      <tr><form action="user" method="post"><input type="hidden" id="operation" name="operation" value="update"></input>
+	        <td><input type="text" id="username" name="username" class="form-control" value="{{username}}" readonly></input></td>
+	        <td><input type="password" id="psswd1" name="psswd1" class="form-control"></input></td>
+	        <td><input type="password" id="psswd2" name="psswd2" class="form-control"></input></td>
+	        <td><button type="submit" class="btin btn-default form-control">Change password</button></td>
+	        </form>
+	      </tr>
+	      {{/users}}
+	      <tr><form action="user" method="post"><input type="hidden" id="operation" name="operation" value="add"></input>
+	        <td><input type="text" id="username" name="username" class="form-control"></input></td>
+	        <td><input type="password" id="psswd1" name="psswd1" class="form-control"></input></td>
+	        <td><input type="password" id="psswd2" name="psswd2" class="form-control"></input></td>
+	        <td><button type="submit" class="btin btn-default form-control">Add user</button></td>
+	        </form>
+	      </tr>
+	    </table>
+	  </p>
+{{>page_end.template}}

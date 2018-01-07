@@ -11,18 +11,9 @@ import me.test.entity.user.User;
 
 public class TestUserQuery extends BasicTestClass {
 	
-	private static QueryUserRequestData qurd;
-	
 	@BeforeClass
 	public static void init() {
 		prepareUsersFolder();
-		
-		qurd = new QueryUserRequestData() {
-			@Override
-			public String getUserName() {
-				return USER1_NAME;
-			}
-		};
 	}
 	
 	@AfterClass
@@ -32,9 +23,18 @@ public class TestUserQuery extends BasicTestClass {
 	
 	@Test
 	public void testQueryUsers() {
-		QueryUserResponseData respData = USE_CASE_PROVIDER.createQueryUserUC().getUser(qurd);
+		QueryUserResponseData respData = USE_CASE_PROVIDER.createQueryUserUC().getUser(() -> USER1_NAME);
 		
-		User u = respData.getUser();
+		User u = respData.getUser().get(0);
+		
+		assertEquals(u.getUsername(), USER1_NAME);
+	}
+	
+	@Test
+	public void testQueryAllUsers() {
+		QueryUserResponseData respData = USE_CASE_PROVIDER.createQueryUserUC().getUser(() -> null);
+		
+		User u = respData.getUser().get(0);
 		
 		assertEquals(u.getUsername(), USER1_NAME);
 	}

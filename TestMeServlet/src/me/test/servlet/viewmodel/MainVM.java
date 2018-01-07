@@ -14,12 +14,18 @@ public class MainVM implements ViewModel {
 	
 	private boolean loggedIn = false;
 	
+	private String username = null;
+	
 	public void setTests(Test[] tests) {
 		this.tests = tests;
 	}
 	
 	public void setLoggedIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
+	}
+	
+	public void setUserName(String userName) {
+		this.username = userName;
 	}
 
 	@Override
@@ -28,6 +34,9 @@ public class MainVM implements ViewModel {
 		
 		ret.put("tests", getTestsData());
 		ret.put("isLoggedIn", loggedIn);
+		if (loggedIn) {
+			ret.put("loggedIn-username", username);
+		}
 		
 		return ret;
 	}

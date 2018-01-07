@@ -87,6 +87,22 @@ public class TestEntityTest {
 		
 		assertFalse(te.isActiveTest(TEST_NAME));
 		assertNull(IOUtils.readFilesByLine(activeFile).stream().map(f -> te.getTestByFileName(f)).filter(t -> t.getName().equals(TEST_NAME)).findAny().orElse(null));
+		
+		activeFile.delete();
+	}
+	
+	@Test
+	public void testLoadWithActivateFile() {
+		IOUtils.writeFile(activeFile, targetFile.getName());
+		
+		TestsEntity te = new TestsEntity(targetDir);
+		
+		me.test.entity.test.Test[] tests = te.getTests();
+		
+		assertEquals(tests.length, 1);
+		assertTrue(tests[0].isActive());
+		
+		activeFile.delete();
 	}
 	
 	@AfterClass

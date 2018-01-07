@@ -1,7 +1,9 @@
+
 package me.test.usecase.test.list;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import me.test.entity.EntityProvider;
@@ -16,17 +18,13 @@ public class QueryTestsUC {
 	}
 	
 	public QueryTestsResponseData getTests(QueryTestsRequestData data) {
-		List<Test> ret = 
-				Arrays.asList(getUnfilteredTests(data.getActiveOnly()))
-					.stream()
-					.filter(data.getFilter())
-					.collect(Collectors.toList());
+		Predicate<Test> filterToUse = (data.getFilter() == null) ? t -> true : data.getFilter();
 		
+		List<Test> ret = Arrays.asList(ENTITY_PROVIDER.getTestEntity().getTests()).stream()
+				.filter(filterToUse)
+				.collect(Collectors.toList());
+				
 		return () -> ret;
-	}
-	
-	private Test[] getUnfilteredTests(boolean onlyActive) {
-		return onlyActive ? ENTITY_PROVIDER.getTestEntity().getActiveTests() : ENTITY_PROVIDER.getTestEntity().getTests();
 	}
 	
 }

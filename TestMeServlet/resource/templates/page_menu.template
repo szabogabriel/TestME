@@ -8,6 +8,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {{^isLoggedIn}}<li {{#active-login}}class="active"{{/active-login}}><a href="login">Login</a></li>{{/isLoggedIn}}
+            {{#isLoggedIn}}<li {{#active-user}}class="active"{{/active-user}}><a href="user">{{loggedIn-username}}</a></li>{{/isLoggedIn}}
             {{#isLoggedIn}}<li {{#active-logout}}class="active"{{/active-logout}}><a href="logout">Logout</a></li>{{/isLoggedIn}}
           </ul>
         </div>

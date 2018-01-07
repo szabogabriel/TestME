@@ -1,8 +1,9 @@
 package me.test.servlet;
 
+import java.awt.List;
 import java.io.IOException;
 import java.util.Map;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,8 +17,6 @@ import me.test.entity.test.Test;
 import me.test.entity.user.User;
 import me.test.servlet.viewmodel.TestManagementVM;
 import me.test.template.TemplateLoader;
-import me.test.usecase.test.activate.ActivateTestRequestData;
-import me.test.usecase.test.list.QueryTestsRequestData;
 import me.test.usecase.test.list.QueryTestsUC;
 
 @WebServlet("/testsManagement")
@@ -32,17 +31,11 @@ public class TestManagement extends BasicServlet {
 		
 		QueryTestsUC uc = Main.INSTANCE.getQueryTestsUC();
 		
-		data.add(
-			uc.getTests(new QueryTestsRequestData() {
-				@Override public Predicate<Test> getFilter() { return t -> true; }
-				@Override public Boolean getActiveOnly() { return Boolean.FALSE; }
-			}).getTests());
+		data.add(uc.getTests(() -> null).getTests());
 		
-		data.activate(
-			uc.getTests(new QueryTestsRequestData() {
-				@Override public Predicate<Test> getFilter() { return t -> true; }
-				@Override public Boolean getActiveOnly() { return Boolean.TRUE;	}
-			}).getTests());
+		data.activate(uc.getTests(() -> null).getTests());
+		
+		data.setUsername(user.getUsername());
 		
 		response.getWriter().write(TEMPLATE.render(data.provideData()));
 	}
@@ -56,27 +49,20 @@ public class TestManagement extends BasicServlet {
 	void doPostLoggedIn(HttpServletRequest request, HttpServletResponse response, User user) throws ServletException, IOException {
 		Map<String, String[]> swp = request.getParameterMap();
 		
-		swp.keySet().stream().forEach(t -> Main.INSTANCE.getActivateTestUC().activate(new Request(t)));
+		Main.INSTANCE.getActivateTestUC().setActiveTests(() -> (swp.keySet()));
+		
+//		swp.keySet().stream().map(tst -> getTest(tst)).collect(Collectors.toSet());
 		
 		doGetLoggedIn(request, response, user);
 	}
-
+	
 	@Override
 	void doPostLoggedOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.sendRedirect("index");
 	}
 	
-	private class Request implements ActivateTestRequestData {
-		private String data;
-		
-		public Request(String data) {
-			this.data = data;
-		}
-		
-		@Override
-		public String getTestCaseName() { 
-			return data;
-		}
+	private Test getTest(String name) {
+		return Main.INSTANCE.getQueryTestsUC().getTests(() -> (t -> t.getName().equals(name))).getTests().get(0);
 	}
 
 }

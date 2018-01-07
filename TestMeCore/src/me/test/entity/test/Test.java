@@ -15,6 +15,8 @@ import java.util.Properties;
 
 public class Test {
 	
+	public static final Test NULL_OBJECT = new Test();
+	
 	private static final String KEY_TITLE = "title";
 	private static final String KEY_INSTRUCTIONS = "instructions";
 	private static final String KEY_ANSWER_NOTE = "answerNote";
@@ -28,6 +30,13 @@ public class Test {
 	
 	private final String name;
 	private final String fileName;
+	
+	private boolean isActive = false;
+	
+	private Test() {
+		name = "";
+		fileName = "";
+	}
 	
 	public Test(File file) throws FileNotFoundException, IOException {
 		TEST_VALUES.load(new FileInputStream(file));
@@ -126,6 +135,14 @@ public class Test {
 		}
 		
 		return ret;
+	}
+	
+	protected void setActive(boolean value) {
+		this.isActive = value;
+	}
+	
+	public boolean isActive() {
+		return isActive;
 	}
 
 }

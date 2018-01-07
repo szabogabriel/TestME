@@ -6,8 +6,6 @@ import me.test.entity.test.Test;
 
 public interface QueryTestsRequestData {
 	
-	Boolean getActiveOnly();
-	
 	Predicate<Test> getFilter();
 
 }

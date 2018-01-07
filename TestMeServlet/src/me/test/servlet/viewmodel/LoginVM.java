@@ -21,7 +21,9 @@ public class LoginVM implements ViewModel {
 	public Map<String, Object> provideData() {
 		Map<String, Object> ret = new HashMap<>();
 		
-		if (username != null) ret.put("username", username);
+		if (username != null) {
+			ret.put("loggedIn-username", username);
+		}
 		
 		ret.put("active-login", !successful);
 		ret.put("active-logout", Boolean.FALSE);

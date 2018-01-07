@@ -14,7 +14,7 @@ public class User {
 	private final String USERNAME;
 	private final String SALT;
 	private final String PASSWORD_HASH;
-
+	
 	public User(String username, String salt, String password) {
 		if (username == null || salt == null || password == null) {
 			throw new IllegalArgumentException("Argument cannot be null!");
@@ -62,7 +62,7 @@ public class User {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public boolean matchesPassword(String password) {
 		boolean ret = false;
 		if (password != null)
@@ -74,8 +74,6 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((PASSWORD_HASH == null) ? 0 : PASSWORD_HASH.hashCode());
-		result = prime * result + ((SALT == null) ? 0 : SALT.hashCode());
 		result = prime * result + ((USERNAME == null) ? 0 : USERNAME.hashCode());
 		return result;
 	}
@@ -89,16 +87,6 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (PASSWORD_HASH == null) {
-			if (other.PASSWORD_HASH != null)
-				return false;
-		} else if (!PASSWORD_HASH.equals(other.PASSWORD_HASH))
-			return false;
-		if (SALT == null) {
-			if (other.SALT != null)
-				return false;
-		} else if (!SALT.equals(other.SALT))
-			return false;
 		if (USERNAME == null) {
 			if (other.USERNAME != null)
 				return false;
@@ -106,7 +94,7 @@ public class User {
 			return false;
 		return true;
 	}
-	
-	
+
+
 
 }

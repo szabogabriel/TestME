@@ -1,7 +1,9 @@
 package me.test.usecase.test.activate;
 
+import java.util.Set;
+
 public interface ActivateTestRequestData {
 	
-	String getTestCaseName();
-
+	Set<String> getTestCasesName();
+	
 }

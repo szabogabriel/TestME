@@ -2,7 +2,6 @@ package me.test.servlet;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Predicate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +16,6 @@ import me.test.entity.user.User;
 import me.test.servlet.viewmodel.TestVM;
 import me.test.template.TemplateLoader;
 import me.test.tools.QueryString;
-import me.test.usecase.test.list.QueryTestsRequestData;
 
 @WebServlet("/test")
 public class TestServlet extends BasicServlet {
@@ -34,17 +32,7 @@ public class TestServlet extends BasicServlet {
 		if (queryString.isKnownKeyAndHaveValue("title")) {
 			String testName = queryString.getValue("title");
 			
-			List<Test> tests = Main.INSTANCE.getQueryTestsUC().getTests(new QueryTestsRequestData() {
-				@Override
-				public Boolean getActiveOnly() {
-					return Boolean.TRUE;
-				}
-
-				@Override
-				public Predicate<Test> getFilter() {
-					return T -> T.getName().equals(testName);
-				}
-			}).getTests();
+			List<Test> tests = Main.INSTANCE.getQueryTestsUC().getTests(() -> (T -> T.getName().equals(testName) && T.isActive())).getTests();
 			
 			if (tests.size() > 0) {
 				ret = tests.get(0);
