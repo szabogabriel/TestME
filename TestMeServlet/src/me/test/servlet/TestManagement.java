@@ -33,7 +33,7 @@ public class TestManagement extends BasicServlet {
 		
 		data.add(uc.getTests(() -> null).getTests());
 		
-		data.activate(uc.getTests(() -> null).getTests());
+		data.activate(uc.getTests(() -> (t -> t.isActive())).getTests());
 		
 		data.setUsername(user.getUsername());
 		

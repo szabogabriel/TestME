@@ -6,6 +6,7 @@ import java.util.Properties;
 
 public enum Config {
 	
+	DIR_ANSWERS("dir.answers", "./answers"),
 	DIR_TESTS("dir.tests", "./tests"),
 	DIR_TEMPLATES("dir.templates", "/templates"),
 	DIR_USERS("dir.users", "/users"),
@@ -31,6 +32,7 @@ public enum Config {
 				}
 			}
 			
+			PROPS.put("dir.answers", workingDir + "/answers");
 			PROPS.put("dir.templates", workingDir + "/templates");
 			PROPS.put("dir.tests", workingDir + "/tests");
 			PROPS.put("dir.users", workingDir + "/users");
