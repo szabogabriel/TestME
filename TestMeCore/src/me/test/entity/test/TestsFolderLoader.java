@@ -1,0 +1,183 @@
+package me.test.entity.test;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import me.test.tools.IOUtils;
+
+public class TestsFolderLoader implements TestsLoader {
+	
+	private static final String KEY_TITLE = "title";
+	private static final String KEY_INSTRUCTIONS = "instructions";
+	private static final String KEY_ANSWER_NOTE = "answerNote";
+	private static final String PREFIX_ANSWER = "answer.";
+	private static final String PREFIX_ANSWER_TYPE_NAME = "answerType.name.";
+	private static final String PREFIX_ANSWER_TYPE_QUESTIONS = "answerType.questions.";
+	private static final String PREFIX_ANSWER_TYPE_DESCRIPTION = "answerType.description.";
+	private static final String PREFIX_QUESTION = "question.";
+	
+	private static final Pattern PATTERN_ORDER = Pattern.compile("([0-9]+)(n?)");
+	
+	private final File ROOT_FOLDER;
+	
+	private final File ACTIVE_FILE;
+	
+	public TestsFolderLoader(File rootFolder) {
+		ROOT_FOLDER = rootFolder;
+		ACTIVE_FILE = new File(ROOT_FOLDER.getAbsolutePath() + File.separator + ".active");
+	}
+
+	@Override
+	public List<Test> load() {
+		List<Test> ret = new LinkedList<>();
+		
+		if (ROOT_FOLDER != null && ROOT_FOLDER.isDirectory()) {
+			Arrays.asList(ROOT_FOLDER.listFiles()).stream()
+				.filter(f -> f.isFile() && f.getName().endsWith(".properties"))
+				.forEach(f -> ret.add(load(f)));
+		}
+		
+		return ret;
+	}
+	
+	public Test load(String name) {
+		String nameToLoad = name + ".properties";
+		return load(new File(ROOT_FOLDER.getAbsolutePath() + File.separator + nameToLoad));
+	}
+	
+	private Test load(File file) {
+		Test ret = new Test();
+		Properties TEST_VALUES = new Properties();
+		
+		if (file != null && file.exists()) {
+			try (FileInputStream fis = new FileInputStream(file)){
+				TEST_VALUES.load(fis);
+				
+				ret.setName(file.getName().substring(0, file.getName().lastIndexOf(".")));
+				
+				ret.setTitle(TEST_VALUES.getProperty(KEY_TITLE, ""));
+				
+				ret.setAnswerNote(TEST_VALUES.getProperty(KEY_ANSWER_NOTE, ""));
+				
+				ret.setInstructions(TEST_VALUES.getProperty(KEY_INSTRUCTIONS, ""));
+				
+				ret.setAnswerDescriptions(getAnswerDescriptions(TEST_VALUES));
+				
+				ret.setQuestions(getQuestions(TEST_VALUES, ret.getAnswerTypes()));
+				
+				ret.setAnswerTypes(getAnswerTypes(TEST_VALUES, ret.getQuestions()));
+				
+				ret.setActive(isActive(ret));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return ret;
+	}
+	
+	private boolean isActive(Test test) {
+		boolean ret = !IOUtils.readFilesByLine(ACTIVE_FILE).stream().noneMatch(l -> l.trim().equals(test.getName()));
+		return ret;
+	}
+	
+	private Question[] getQuestions(Properties TEST_VALUES, AnswerType[] answerTypes) {
+		return Arrays.asList(getIndexedValues(TEST_VALUES, PREFIX_QUESTION)).stream()
+			.map(q -> new Question(q))
+			.toArray(Question[]::new);
+	}
+	
+	private AnswerDescription[] getAnswerDescriptions(Properties TEST_VALUES) {
+		return Arrays.asList(getIndexedValues(TEST_VALUES, PREFIX_ANSWER)).stream()
+			.map(t -> new AnswerDescription(t))
+			.toArray(AnswerDescription[]::new);
+	}
+	
+	private AnswerType[] getAnswerTypes(Properties TEST_VALUES, Question[] questions) {
+		String[] names = getIndexedValues(TEST_VALUES, PREFIX_ANSWER_TYPE_NAME);
+		String[] quess = getIndexedValues(TEST_VALUES, PREFIX_ANSWER_TYPE_QUESTIONS);
+		String[] descs = getIndexedValues(TEST_VALUES, PREFIX_ANSWER_TYPE_DESCRIPTION);
+		
+		AnswerType[] ret = new AnswerType[names.length];
+		
+		for (int i = 0; i < ret.length; i++) {
+			ret[i] = new AnswerType(names[i], getQuestions(questions, quess[i]), descs[i]);
+		}
+		
+		return ret;
+	}
+	
+	private List<Question> getQuestions(Question[] questions, String list) {
+		List<Question> ret = new LinkedList<>();
+		
+		if (list != null) {
+			String [] values = list.split(",");
+			for (String it : values) {
+				Matcher m = PATTERN_ORDER.matcher(it);
+				if (m.matches()) {
+					ret.add(questions[Integer.parseInt(m.group(1)) - 1]);
+				}
+			}
+			
+		}
+		
+		return ret;
+	}
+	
+	private String[] getIndexedValues(Properties TEST_VALUES, String prefix) {
+		Map<String, String> ret_map = new HashMap<>();
+		
+		Enumeration<Object> enums = TEST_VALUES.keys();
+		while (enums.hasMoreElements()) {
+			String tmp = enums.nextElement().toString();
+			if (tmp.startsWith(prefix)) {
+				ret_map.put(tmp, TEST_VALUES.getProperty(tmp));
+			}
+		}
+		
+		String [] ret = new String[ret_map.size()];
+		
+		for (int i = 1; i <= ret.length; i++) {
+			ret[i - 1] = ret_map.get(prefix + i);
+		}
+		
+		return ret;
+	}
+	
+	@Override
+	public void persist(Test test) {
+		// TODO save test
+		
+		List<String> activeFileContent = IOUtils.readFilesByLine(ACTIVE_FILE);
+		boolean contains = false;
+		for (String line : activeFileContent) { 
+			if (line.trim().equals(test.getName())) {
+				contains = true; 
+			}
+		}
+		
+		if (contains && !test.isActive()) {
+			IOUtils.writeFile(ACTIVE_FILE, activeFileContent.stream().filter(l -> !l.trim().equals(test.getName())).collect(Collectors.toList()));
+		} else
+		if (!contains && test.isActive()) {
+			activeFileContent.add(test.getName());
+			IOUtils.writeFile(ACTIVE_FILE, activeFileContent);
+		}
+	}
+
+	@Override
+	public void persist(List<Test> tests) {
+		tests.stream().forEach(t -> persist(t));
+	}
+
+}

@@ -16,7 +16,10 @@ public class TestTest {
 	
 	private static me.test.entity.test.Test test;
 	
-	private static File file = new File("./test/me/test/entity/test/probatest2.properties");
+	private static File folder = new File("./test/me/test/entity/test");
+	
+	private static String testName = "probatest2";
+	private static File file = new File(folder.getAbsolutePath() + "/" + testName +  ".properties");
 	
 	@BeforeClass
 	public static void init() throws FileNotFoundException, IOException {
@@ -54,7 +57,9 @@ public class TestTest {
 			e.printStackTrace();
 		}
 		
-		test = new me.test.entity.test.Test(file);
+		TestsFolderLoader loader = new TestsFolderLoader(folder);
+		
+		test = loader.load(testName);
 	}
 	
 	@Test
@@ -73,23 +78,26 @@ public class TestTest {
 	
 	@Test
 	public void testAnswerTypes() {
-		String [] answers = test.getAnswerTypeNames();
+		AnswerType [] answers = test.getAnswerTypes();
 		
 		assertEquals(answers.length, 2);
 		
-		assertEquals(answers[0], "One");
-		assertEquals(answers[1], "Two");
+		assertEquals(answers[0].getName(), "One");
+		assertEquals(answers[1].getName(), "Two");
+		
+		assertEquals(answers[0].getDescription(), "DescriptionOne");
+		assertEquals(answers[1].getDescription(), "DescriptionTwo");
 	}
 	
 	@Test
 	public void testAnswerValues() {
-		String [] answerValues = test.getAnswerValues();
+		AnswerDescription [] answerValues = test.getAnswerDescriptions();
 		
 		assertEquals(answerValues.length, 3);
 		
-		assertEquals(answerValues[0], "Answer1");
-		assertEquals(answerValues[1], "Answer2");
-		assertEquals(answerValues[2], "Answer3");
+		assertEquals(answerValues[0].getDescription(), "Answer1");
+		assertEquals(answerValues[1].getDescription(), "Answer2");
+		assertEquals(answerValues[2].getDescription(), "Answer3");
 	}
 	
 	@Test
@@ -101,31 +109,31 @@ public class TestTest {
 	
 	@Test
 	public void testQuestions() {
-		String [] swp = test.getQuestions();
+		Question [] swp = test.getQuestions();
 		
 		assertEquals(swp.length, 5);
 		
-		assertEquals(swp[0], "Question 1");
-		assertEquals(swp[1], "Question 2");
-		assertEquals(swp[2], "Question 3");
-		assertEquals(swp[3], "Question 4");
-		assertEquals(swp[4], "Question 5");
+		assertEquals(swp[0].getText(), "Question 1");
+		assertEquals(swp[1].getText(), "Question 2");
+		assertEquals(swp[2].getText(), "Question 3");
+		assertEquals(swp[3].getText(), "Question 4");
+		assertEquals(swp[4].getText(), "Question 5");
 	}
 	
 	@Test
 	public void testSpecificQuestions() {
-		String [] swp = test.getQuestions("One");
+		Question [] swp = test.getQuestions("One");
 		
 		assertEquals(swp.length, 2);
-		assertEquals(swp[0], "Question 2");
-		assertEquals(swp[1], "Question 5");
+		assertEquals(swp[0].getText(), "Question 2");
+		assertEquals(swp[1].getText(), "Question 5");
 		
 		swp = test.getQuestions("Two");
 		
 		assertEquals(swp.length, 3);
-		assertEquals(swp[0], "Question 1");
-		assertEquals(swp[1], "Question 3");
-		assertEquals(swp[2], "Question 4");
+		assertEquals(swp[0].getText(), "Question 1");
+		assertEquals(swp[1].getText(), "Question 3");
+		assertEquals(swp[2].getText(), "Question 4");
 	}
 	
 	@AfterClass

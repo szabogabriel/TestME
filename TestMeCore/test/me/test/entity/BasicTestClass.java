@@ -6,6 +6,10 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.util.Properties;
 
+import me.test.entity.answer.AnswersFolderLoader;
+import me.test.entity.answer.AnswersLoader;
+import me.test.entity.test.TestsFolderLoader;
+import me.test.entity.test.TestsLoader;
 import me.test.tools.IOUtils;
 import me.test.usecase.UseCaseProvider;
 
@@ -13,6 +17,7 @@ public class BasicTestClass implements EntityProviderInitData {
 	
 	public static final File TARGET_DIR_USERS = new File("./test/me/test/entity/users");
 	public static final File TARGET_DIR_TESTS = new File("./test/me/test/entity/tests");
+	public static final File TARGET_DIR_ANSWERS = new File("./test/me/test/entity/answers");
 	
 	public static final String USER1_NAME = "admin";
 	public static final String USER1_SALT = "Keps4";
@@ -84,6 +89,10 @@ public class BasicTestClass implements EntityProviderInitData {
 		}
 	}
 	
+	public static void prepareAnswersFolder() {
+		//TODO
+	}
+	
 	protected static void cleanup() {
 		if (TARGET_DIR_USERS.exists()) {
 			IOUtils.cleanAndDeleteDir(TARGET_DIR_USERS);
@@ -91,16 +100,24 @@ public class BasicTestClass implements EntityProviderInitData {
 		if (TARGET_DIR_TESTS.exists()) {
 			IOUtils.cleanAndDeleteDir(TARGET_DIR_TESTS);
 		}
+		if (TARGET_DIR_ANSWERS.exists()) {
+			IOUtils.cleanAndDeleteDir(TARGET_DIR_ANSWERS);
+		}
 	}
 
 	@Override
-	public File getTestsFolder() {
-		return TARGET_DIR_TESTS;
+	public TestsLoader getTestsLoader() {
+		return new TestsFolderLoader(TARGET_DIR_TESTS);
 	}
 
 	@Override
 	public File getUsersFolder() {
 		return TARGET_DIR_USERS;
+	}
+
+	@Override
+	public AnswersLoader getAnswersLoader() {
+		return new AnswersFolderLoader(TARGET_DIR_ANSWERS);
 	}
 	
 	

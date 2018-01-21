@@ -44,9 +44,9 @@ public class TestVM implements ViewModel {
 	private List<Map<String, Object>> getAnswers() {
 		List<Map<String, Object>> ret = new ArrayList<>();
 		
-		Arrays.asList(test.getAnswerValues()).stream().forEach(t -> {
+		Arrays.asList(test.getAnswerTypes()).stream().forEach(t -> {
 			Map<String, Object> tmp = new HashMap<>();
-			tmp.put("answer_value", t);
+			tmp.put("answer_value", t.getDescription());
 			ret.add(tmp);
 		});
 		
@@ -56,9 +56,9 @@ public class TestVM implements ViewModel {
 	private List<Map<String, Object>> getAnswerTypes() {
 		List<Map<String, Object>> ret = new ArrayList<>();
 		
-		Arrays.asList(test.getAnswerTypeNames()).stream().forEach(t -> {
+		Arrays.asList(test.getAnswerTypes()).stream().forEach(t -> {
 			Map<String, Object> tmp = new HashMap<>();
-			tmp.put("answer_type", t);
+			tmp.put("answer_type", t.getName());
 			ret.add(tmp);
 		});
 		

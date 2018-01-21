@@ -1,14 +1,24 @@
 package me.test.entity.answer;
 
-import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import me.test.entity.test.Test;
 
 public class AnswersEntity {
 	
-	private final File ROOT;
+	private final AnswersLoader LOADER;
 	
-	public AnswersEntity(File rootFolder) {
-		ROOT = rootFolder;
-		reload();
+	private final Map<Test, Set<Answer>> ANSWERS = new HashMap<>(); 
+	
+	public AnswersEntity(AnswersLoader loader) {
+		LOADER = loader;
+		
 	}
-
+	
+	private void loadTests() {
+		//TODO
+	}
+	
 }

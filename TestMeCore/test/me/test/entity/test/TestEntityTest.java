@@ -65,7 +65,7 @@ public class TestEntityTest {
 	
 	@Test
 	public void testTestsEntityLoad() {
-		TestsEntity te = new TestsEntity(targetDir);
+		TestsEntity te = new TestsEntity(new TestsFolderLoader(targetDir));
 		
 		assertEquals(te.getTests().length, 1);
 		assertTrue(te.isKnownTest(TEST_NAME));
@@ -74,7 +74,7 @@ public class TestEntityTest {
 	
 	@Test
 	public void testTestsEntityActivateDeactivate() {
-		TestsEntity te = new TestsEntity(targetDir);
+		TestsEntity te = new TestsEntity(new TestsFolderLoader(targetDir));
 		
 		te.activate(te.getTestByName(TEST_NAME));
 		
@@ -86,16 +86,16 @@ public class TestEntityTest {
 		te.deactivate(te.getTestByName(TEST_NAME));
 		
 		assertFalse(te.isActiveTest(TEST_NAME));
-		assertNull(IOUtils.readFilesByLine(activeFile).stream().map(f -> te.getTestByFileName(f)).filter(t -> t.getName().equals(TEST_NAME)).findAny().orElse(null));
+		assertNull(IOUtils.readFilesByLine(activeFile).stream().map(f -> te.getTestByName(f)).filter(t -> t.getName().equals(TEST_NAME)).findAny().orElse(null));
 		
 		activeFile.delete();
 	}
 	
 	@Test
 	public void testLoadWithActivateFile() {
-		IOUtils.writeFile(activeFile, targetFile.getName());
+		IOUtils.writeFile(activeFile, TEST_NAME);
 		
-		TestsEntity te = new TestsEntity(targetDir);
+		TestsEntity te = new TestsEntity(new TestsFolderLoader(targetDir));
 		
 		me.test.entity.test.Test[] tests = te.getTests();
 		

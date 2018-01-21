@@ -5,6 +5,9 @@ import java.io.File;
 import me.test.config.Config;
 import me.test.entity.EntityProvider;
 import me.test.entity.EntityProviderInitData;
+import me.test.entity.answer.AnswersFolderLoader;
+import me.test.entity.answer.AnswersLoader;
+import me.test.entity.test.TestsFolderLoader;
 import me.test.usecase.UseCaseProvider;
 import me.test.usecase.test.activate.ActivateTestUC;
 import me.test.usecase.test.answer.TestAnswerUC;
@@ -30,13 +33,18 @@ public class Main implements EntityProviderInitData {
 	//              Overriden methods
 	// ==============================================
 	@Override
-	public File getTestsFolder() {
-		return new File(Config.DIR_TESTS.toString());
+	public TestsFolderLoader getTestsLoader() {
+		return new TestsFolderLoader(new File(Config.DIR_TESTS.toString()));
 	}
 
 	@Override
 	public File getUsersFolder() {
 		return new File(Config.DIR_USERS.toString());
+	}
+	
+	@Override
+	public AnswersLoader getAnswersLoader() {
+		return new AnswersFolderLoader(new File(Config.DIR_ANSWERS.toString()));
 	}
 	
 	// ==============================================
@@ -69,4 +77,5 @@ public class Main implements EntityProviderInitData {
 	public ForcePasswordUC getForcePasswordUC() {
 		return USE_CASE_PROVIDER.createForcePasswordUC();
 	}
+
 }

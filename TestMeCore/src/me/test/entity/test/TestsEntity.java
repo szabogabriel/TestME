@@ -1,64 +1,34 @@
 package me.test.entity.test;
 
-import java.io.File;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import me.test.tools.IOUtils;
 
 public class TestsEntity {
 	
-	private final Set<Test> TESTS = new HashSet<>();
+	private final TestsLoader LOADER;
 	
-	private final File ROOT;
-	
-	public TestsEntity(File rootFolder) {
-		ROOT = rootFolder;
-		reload();
-	}
-	
-	public void reload() {
-		TESTS.clear();
-		
-		for (File it : ROOT.listFiles()) {
-			if (it.getName().endsWith("properties")) {
-				try {
-					TESTS.add(new Test(it));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		File activeFile = getActivateFile();
-		
-		if (activeFile.exists()) {
-			IOUtils.readFilesByLine(activeFile).stream()
-				.filter(t -> getTestByFileName(t) != Test.NULL_OBJECT)
-				.forEach(t -> getTestByFileName(t).setActive(true));
-		}
+	public TestsEntity(TestsLoader loader) {
+		LOADER = loader;
 	}
 	
 	public Test[] getTests() {
-		return TESTS.stream().toArray(Test[]::new);
+		return LOADER.load().stream().toArray(Test[]::new);
 	}
 	
 	public Test[] getActiveTests() {
-		return TESTS.stream().filter(t -> t.isActive()).toArray(Test[]::new);
-	}
-	
-	public Test getTestByFileName(String fileName) {
-		return TESTS.stream().filter(t -> t.getFileName().equals(fileName)).findAny().orElse(Test.NULL_OBJECT);
+		return LOADER.load().stream().filter(t -> t.isActive()).toArray(Test[]::new);
 	}
 	
 	public Test getTestByName(String name) {
-		return TESTS.stream().filter(t -> t.getName().equals(name)).findAny().orElse(Test.NULL_OBJECT);
+		Test ret = LOADER.load(name);
+		if (ret.getName() == null) {
+			ret = Test.NULL_OBJECT;
+		}
+		return ret;
 	}
 	
 	public boolean isKnownTest(String name) {
-		return TESTS.stream().filter(t -> t.getName().equals(name)).findAny().isPresent();
+		return LOADER.load().stream().filter(t -> t.getName().equals(name)).findAny().isPresent();
 	}
 	
 	public boolean isActiveTest(String name) {
@@ -67,8 +37,7 @@ public class TestsEntity {
 	
 	public void activate(Test test) {
 		test.setActive(true);
-		TESTS.add(test);
-		updateActivateFile();
+		LOADER.persist(test);
 	}
 	
 	public void activate(List<Test> tests) {
@@ -77,21 +46,15 @@ public class TestsEntity {
 	
 	public void deactivate(Test test) {
 		test.setActive(false);
-		TESTS.add(test);
-		updateActivateFile();
+		LOADER.persist(test);
 	}
 	
 	public void deactivate() {
-		TESTS.stream().forEach(t -> t.setActive(false));
-		getActivateFile().delete();
+		List<Test> tmp = LOADER.load();
+		for (Test it : tmp) {
+			it.setActive(false);
+		}
+		LOADER.persist(tmp.stream().collect(Collectors.toList()));
 	}
 	
-	private void updateActivateFile() {
-		IOUtils.writeFile(getActivateFile(), TESTS.stream().filter(t -> t.isActive()).map(t -> t.getFileName()).collect(Collectors.joining(System.lineSeparator())));
-	}
-	
-	private File getActivateFile() {
-		return new File(ROOT.getAbsolutePath() + "/.active");
-	}
-
 }

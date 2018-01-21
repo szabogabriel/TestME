@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IOUtils {
 	
@@ -26,18 +27,28 @@ public class IOUtils {
 	public static List<String> readFilesByLine(File toRead) {
 		List<String> ret = new LinkedList<>();
 		
-		try (BufferedReader in = new BufferedReader(new FileReader(toRead))) {
-			String line;
-			while ((line = in.readLine()) != null) {
-				ret.add(line);
+		if (toRead.exists()) {
+			try (BufferedReader in = new BufferedReader(new FileReader(toRead))) {
+				String line;
+				while ((line = in.readLine()) != null) {
+					ret.add(line);
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		
 		return ret;
+	}
+	
+	public static void writeFile(File toFile, List<String> content) {
+		writeFile(toFile, content, false);
+	}
+	
+	public static void writeFile(File toFile, List<String> content, boolean append) {
+		writeFile(toFile, content.stream().collect(Collectors.joining(System.lineSeparator())), append);
 	}
 	
 	public static void writeFile(File toFile, String content) {

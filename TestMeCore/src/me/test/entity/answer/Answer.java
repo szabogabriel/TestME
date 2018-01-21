@@ -1,5 +1,11 @@
 package me.test.entity.answer;
 
-public class Answer {
+import java.io.File;
 
+public class Answer {
+	
+	public Answer() {
+		
+	}
+	
 }

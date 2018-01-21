@@ -1,143 +1,96 @@
 
 package me.test.entity.test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.Arrays;
 
 public class Test {
 	
 	public static final Test NULL_OBJECT = new Test();
 	
-	private static final String KEY_TITLE = "title";
-	private static final String KEY_INSTRUCTIONS = "instructions";
-	private static final String KEY_ANSWER_NOTE = "answerNote";
-	private static final String PREFIX_ANSWER = "answer.";
-	private static final String PREFIX_ANSWER_TYPE_NAME = "answerType.name.";
-	private static final String PREFIX_ANSWER_TYPE_QUESTIONS = "answerType.questions.";
-	private static final String PREFIX_ANSWER_TYPE_DESCRIPTION = "answerType.description.";
-	private static final String PREFIX_QUESTION = "question.";
+	private String name = null;
 	
-	private final Properties TEST_VALUES = new Properties();
+	private String title = null;
+	private String instructions = null;
+	private String answerNote = null;
 	
-	private final String name;
-	private final String fileName;
+	private Question[] questions = null;
+	private AnswerType[] answerTypes = null;
+	private AnswerDescription[] answerDescriptions = null;
 	
 	private boolean isActive = false;
 	
-	private Test() {
+	public Test() {
 		name = "";
-		fileName = "";
-	}
-	
-	public Test(File file) throws FileNotFoundException, IOException {
-		TEST_VALUES.load(new FileInputStream(file));
-		fileName = file.getName();
-		this.name = fileName.substring(0, file.getName().lastIndexOf("."));
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public String getFileName() {
-		return fileName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getTitle() {
-		return TEST_VALUES.getProperty(KEY_TITLE, "");
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	public String getInstructions() {
-		return TEST_VALUES.getProperty(KEY_INSTRUCTIONS, "");
+		return instructions;
 	}
 	
-	public String[] getAnswerValues() {
-		return getIndexedValues(PREFIX_ANSWER);
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
+	}
+	
+	public AnswerType[] getAnswerTypes() {
+		return answerTypes;
+	}
+	
+	public AnswerType getAnswerTypeByName(String name) {
+		AnswerType at = Arrays.asList(getAnswerTypes()).stream().filter(a -> a.getName().equals(name)).findAny().orElse(null);
+		return at;
+	}
+	
+	public void setAnswerTypes(AnswerType[] answerTypes) {
+		this.answerTypes = answerTypes; 
+	}
+	
+	public AnswerDescription[] getAnswerDescriptions() {
+		return answerDescriptions;
+	}
+	
+	public void setAnswerDescriptions(AnswerDescription[] descriptions) {
+		this.answerDescriptions = descriptions;
 	}
 	
 	public String getAnswerNote() {
-		return TEST_VALUES.getProperty(KEY_ANSWER_NOTE, "");
+		return answerNote;
 	}
 	
-	public String[] getQuestions() {
-		return getIndexedValues(PREFIX_QUESTION);
+	public void setAnswerNote(String note) {
+		this.answerNote = note;
 	}
 	
-	public String[] getQuestions(String answerTypeName) {
-		String key = PREFIX_ANSWER_TYPE_QUESTIONS + findAnswerTypeIndex(answerTypeName);
-		String [] values = TEST_VALUES.getProperty(key, "").split(",");
-		List<String> ret = new ArrayList<>();
-		
-		for (String it : values) {
-			String swp = it;
-			if (it.endsWith("n") || it.endsWith("N")) {
-				swp = it.substring(0, it.length() - 1);
-			}
-			ret.add(TEST_VALUES.getProperty(PREFIX_QUESTION + swp));
-		}
-		
-		return ret.stream().toArray(String[]::new);
+	public Question[] getQuestions() {
+		return questions;
 	}
 	
-	public String[] getAnswerTypeNames(){
-		List<String> values = new LinkedList<>();
-		
-		Enumeration<Object> enums = TEST_VALUES.keys();
-		while (enums.hasMoreElements()) {
-			String tmp = enums.nextElement().toString();
-			if (tmp.startsWith(PREFIX_ANSWER_TYPE_NAME)) {
-				values.add(TEST_VALUES.getProperty(tmp));
-			}
-		}
-		
-		String [] ret = values.stream().sorted((s1, s2) -> s1.compareTo(s2)).toArray(String[]::new);
-		return ret;
-	}
-	
-	private int findAnswerTypeIndex(String name) {
-		int i = 1;
-		int ret = -1;
-		
-		while (ret == -1 && TEST_VALUES.containsKey(PREFIX_ANSWER_TYPE_NAME + i)) {
-			if (TEST_VALUES.getProperty(PREFIX_ANSWER_TYPE_NAME + i).equals(name)) {
-				ret = i;
-			}
-			i++;
-		}
+	public Question[] getQuestions(String answerType) {
+		Question[] ret = getAnswerTypeByName(answerType).getQuestions().stream().toArray(Question[]::new);
 		
 		return ret;
 	}
 	
-	private String[] getIndexedValues(String prefix) {
-		Map<String, String> ret_map = new HashMap<>();
-		
-		Enumeration<Object> enums = TEST_VALUES.keys();
-		while (enums.hasMoreElements()) {
-			String tmp = enums.nextElement().toString();
-			if (tmp.startsWith(prefix)) {
-				ret_map.put(tmp, TEST_VALUES.getProperty(tmp));
-			}
-		}
-		
-		String [] ret = new String[ret_map.size()];
-		
-		for (int i = 1; i <= ret.length; i++) {
-			ret[i - 1] = ret_map.get(prefix + i);
-		}
-		
-		return ret;
+	public void setQuestions(Question[] questions) {
+		this.questions = questions;
 	}
 	
-	protected void setActive(boolean value) {
+	public void setActive(boolean value) {
 		this.isActive = value;
 	}
 	
@@ -145,4 +98,29 @@ public class Test {
 		return isActive;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Test other = (Test) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+	
 }

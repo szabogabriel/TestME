@@ -1,5 +1,6 @@
 package me.test.entity;
 
+import me.test.entity.answer.AnswersEntity;
 import me.test.entity.test.TestsEntity;
 import me.test.entity.user.UserEntity;
 
@@ -9,6 +10,7 @@ public class EntityProvider {
 	
 	private TestsEntity testEntity = null;
 	private UserEntity userEntity = null;
+	private AnswersEntity answerEntity = null;
 	
 	
 	// ========================================
@@ -28,7 +30,7 @@ public class EntityProvider {
 	// ========================================
 	public TestsEntity getTestEntity() {
 		if (testEntity == null) {
-			testEntity = new TestsEntity(INIT_DATA.getTestsFolder());
+			testEntity = new TestsEntity(INIT_DATA.getTestsLoader());
 		}
 		return testEntity;
 	}
@@ -38,6 +40,13 @@ public class EntityProvider {
 			userEntity = new UserEntity(INIT_DATA.getUsersFolder());
 		}
 		 return userEntity;
+	}
+	
+	public AnswersEntity getAnswersEntity() {
+		if (answerEntity == null) {
+			answerEntity = new AnswersEntity(INIT_DATA.getAnswersLoader());
+		}
+		return answerEntity;
 	}
 
 }
