@@ -16,12 +16,15 @@
 	      </p>
 	      <h2>Kerdesek</h2>
 	      <p>
-	        <table class="table">
-	          {{#questions}}<tr>
-	            <td>{{question}}</td>
-	            <td><select><option value="">-</option>{{#answers}}<option value="{{answer_value}}">{{answer_value}}</option>{{/answers}}</select></td>
-	          </tr>{{/questions}}
-	        </table>
+	        <form action="test" method="post">
+		      <table class="table">
+		        {{#questions}}<tr>
+		          <td>{{question}}</td>
+		          <td><select name="answer_{{question-id}}"><option value="-">-</option>{{#answers}}<option value="{{answer_value}}">{{answer_value}}</option>{{/answers}}</select></td>
+		        </tr>{{/questions}}
+		      </table>
+		      <button type="submit" class="btn btn-default">Submit</button>
+	        </form>
 	      </p>
       {{/test_set}}
       {{^test_set}}

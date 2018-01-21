@@ -17,8 +17,4 @@ public class AnswersEntity {
 		
 	}
 	
-	private void loadTests() {
-		//TODO
-	}
-	
 }

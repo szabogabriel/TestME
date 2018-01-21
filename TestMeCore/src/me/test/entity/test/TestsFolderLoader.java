@@ -92,9 +92,14 @@ public class TestsFolderLoader implements TestsLoader {
 	}
 	
 	private Question[] getQuestions(Properties TEST_VALUES, AnswerType[] answerTypes) {
-		return Arrays.asList(getIndexedValues(TEST_VALUES, PREFIX_QUESTION)).stream()
-			.map(q -> new Question(q))
-			.toArray(Question[]::new);
+		String [] questions = getIndexedValues(TEST_VALUES, PREFIX_QUESTION);
+		Question[] ret = new Question[questions.length];
+		
+		for (int i = 0; i < questions.length; i++) {
+			ret[i] = new Question(i, questions[i]);
+		}
+		
+		return ret;
 	}
 	
 	private AnswerDescription[] getAnswerDescriptions(Properties TEST_VALUES) {

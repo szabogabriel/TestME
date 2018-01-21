@@ -26,6 +26,11 @@ public class AnswersFolderLoader implements AnswersLoader {
 		return ret;
 	}
 	
+	@Override
+	public Set<Answer> load(String test) {
+		return loadAnswersForTest(new File(FOLDER.getAbsoluteFile() + File.separator + test));
+	}
+	
 	private Set<Answer> loadAnswersForTest(File folder) {
 		Set<Answer> ret = new HashSet<>();
 		

@@ -67,6 +67,7 @@ public class TestServlet extends BasicServlet {
 	@Override
 	protected void doPostLoggedOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//TODO - handle the post of the test.
+		response.sendRedirect("index");
 	}
 
 }

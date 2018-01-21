@@ -5,6 +5,7 @@
           </div>
           <ul class="nav navbar-nav">
           	{{#isLoggedIn}}<li {{#active-manage-tests}}class="active"{{/active-manage-tests}}><a href="testsManagement">Tests management</a></li>{{/isLoggedIn}}
+          	{{#isLoggedIn}}<li {{#active-manage-answers}}class="active"{{/active-manage-answers}}><a href="answersManagement">Answers management</a></li>{{/isLoggedIn}}
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {{^isLoggedIn}}<li {{#active-login}}class="active"{{/active-login}}><a href="login">Login</a></li>{{/isLoggedIn}}

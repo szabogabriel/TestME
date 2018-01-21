@@ -7,6 +7,8 @@ public interface AnswersLoader {
 	
 	Map<String, Set<Answer>> load(); 
 	
+	Set<Answer> load(String test);
+	
 	void save(String test, Answer answer);
-
+	
 }
