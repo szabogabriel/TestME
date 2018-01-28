@@ -12,10 +12,32 @@ public class TestVM implements ViewModel {
 	
 	private Test test = null;
 	
+	private boolean loggedIn = false;
+	private String username = null;
+	
+	private int resp_age = -1;
+	private String resp_name = null;
+	
 	public void setTest(Test test) {
 		this.test = test;
 	}
-
+	
+	public void setLoggedIn(boolean value) {
+		this.loggedIn = value;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public void setResponserAge(int age) {
+		this.resp_age = age;
+	}
+	
+	public void setRespName(String name) {
+		this.resp_name = name;
+	}
+	
 	@Override
 	public Map<String, Object> provideData() {
 		return getTestData();
@@ -23,6 +45,14 @@ public class TestVM implements ViewModel {
 	
 	private Map<String, Object> getTestData() {
 		Map<String, Object> ret = new HashMap<>();
+		
+		if (loggedIn) {
+			ret.put("isLoggedIn", loggedIn);
+			ret.put("loggedIn-username", username);
+		}
+		
+		if (resp_age != -1) ret.put("responder_age", new Integer(resp_age));
+		if (resp_name != null) ret.put("responder_name", resp_name);
 		
 		if (test != null) {
 			ret.put("test_set", Boolean.TRUE);

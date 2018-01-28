@@ -3,12 +3,15 @@ package me.test.entity.answer;
 import java.util.Map;
 import java.util.Set;
 
+import me.test.entity.test.Test;
+import me.test.entity.test.TestsEntity;
+
 public interface AnswersLoader {
 	
-	Map<String, Set<Answer>> load(); 
+	Map<String, Set<Answer>> load(TestsEntity tests); 
 	
-	Set<Answer> load(String test);
+	Set<Answer> load(Test test);
 	
-	void save(String test, Answer answer);
+	void save(Answer answer);
 	
 }

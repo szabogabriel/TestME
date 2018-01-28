@@ -17,6 +17,9 @@
 	      <h2>Kerdesek</h2>
 	      <p>
 	        <form action="test" method="post">
+	          <input type="hidden" name="username" value="{{responder_name}}" />
+	          <input type="hidden" name="age" value="{{responder_age}}" />
+	          <input type="hidden" name="test" value="{{test_name}}" />
 		      <table class="table">
 		        {{#questions}}<tr>
 		          <td>{{question}}</td>

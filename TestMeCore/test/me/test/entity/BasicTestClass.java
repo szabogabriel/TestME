@@ -90,7 +90,17 @@ public class BasicTestClass implements EntityProviderInitData {
 	}
 	
 	public static void prepareAnswersFolder() {
-		//TODO
+		if (!TARGET_DIR_ANSWERS.exists()) {
+			TARGET_DIR_ANSWERS.mkdirs();
+		}
+		try (BufferedWriter out = new BufferedWriter(new FileWriter(new File(TARGET_DIR_ANSWERS.getAbsolutePath() + "/answer1.properties")))) {
+			StringBuilder sb = new StringBuilder();
+			
+			
+			out.write(sb.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	protected static void cleanup() {

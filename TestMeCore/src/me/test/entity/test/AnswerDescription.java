@@ -12,4 +12,31 @@ public class AnswerDescription {
 		return DESCRIPTION;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((DESCRIPTION == null) ? 0 : DESCRIPTION.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AnswerDescription other = (AnswerDescription) obj;
+		if (DESCRIPTION == null) {
+			if (other.DESCRIPTION != null)
+				return false;
+		} else if (!DESCRIPTION.equals(other.DESCRIPTION))
+			return false;
+		return true;
+	}
+	
+	
+
 }

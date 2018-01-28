@@ -1,13 +1,35 @@
 package me.test.entity.answer;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import me.test.entity.test.AnswerDescription;
+import me.test.entity.test.Question;
+import me.test.entity.test.Test;
+import me.test.entity.test.TestsEntity;
 
 public class AnswersFolderLoader implements AnswersLoader {
+	
+	private static final String KEY_USERNAME = "username";
+	private static final String KEY_AGE = "age";
+	private static final String KEY_TIMESTAMP = "timestamp";
+	private static final String KEY_PREFIX_ANSWER = "answer.";
+	
+	private static final Pattern KEY_SPLITTER_REGEX = Pattern.compile("answer.([0-9]+)");
 	
 	private final File FOLDER;
 	
@@ -16,46 +38,126 @@ public class AnswersFolderLoader implements AnswersLoader {
 	}
 
 	@Override
-	public Map<String, Set<Answer>> load() {
+	public Map<String, Set<Answer>> load(TestsEntity tests) {
 		Map<String, Set<Answer>> ret = new HashMap<>();
 		
 		Arrays.asList(FOLDER.listFiles()).stream()
 			.filter(f -> f.isDirectory() && f.exists())
-			.forEach(f -> ret.put(f.getName(), loadAnswersForTest(f)));
+			.forEach(f -> ret.put(
+					f.getName(), 
+					loadAnswersForTest(
+							f, 
+							tests.getTestByName(
+									f.getName().substring(
+											0, 
+											f.getName().length() - ".properties".length()
+									)
+							)
+					)
+			));
 		
 		return ret;
 	}
 	
 	@Override
-	public Set<Answer> load(String test) {
-		return loadAnswersForTest(new File(FOLDER.getAbsoluteFile() + File.separator + test));
+	public Set<Answer> load(Test test) {
+		return loadAnswersForTest(new File(FOLDER.getAbsoluteFile() + File.separator + test.getName()), test);
 	}
 	
-	private Set<Answer> loadAnswersForTest(File folder) {
+	private Set<Answer> loadAnswersForTest(File folder, Test test) {
 		Set<Answer> ret = new HashSet<>();
 		
 		if (folder != null) {
 			Arrays.asList(folder.listFiles()).stream()
 				.filter(f -> f.isFile() && f.getName().endsWith(".properties"))
-				.forEach(f -> ret.add(loadAnswer(f)));
+				.forEach(f -> ret.add(loadAnswer(f, test)));
 		}
 		
 		return ret;
 	}
 	
-	private Answer loadAnswer(File f) {
+	private Answer loadAnswer(File f, Test test) {
 		Answer ret = new Answer();
+		Properties prop = new Properties();
 		
-		//TODO
+		try (InputStream in = new FileInputStream(f)) {
+			prop.load(in);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
+		ret.setUser(prop.getProperty(KEY_USERNAME));
+		try { ret.setAge(Integer.parseInt(prop.getProperty(KEY_AGE))); } catch (Exception e) {}
+		try { ret.setTimestamp(Long.parseLong(KEY_TIMESTAMP)); } catch (Exception e) {}
+		ret.setTest(test);
+		
+		List<String> keys = prop.keySet().stream()
+			.filter(key -> key.toString().startsWith(KEY_PREFIX_ANSWER))
+			.map(key -> key.toString())
+			.collect(Collectors.toList()
+		);
+		
+		for (String it : keys) {
+			Question q = null;
+			try { q = test.getQuestions()[getKeyNumber(it)]; } catch (Exception e) { q = null; }
+			AnswerDescription ad = findAnswerDescription(test, prop.getProperty(it));
+			
+			if (q != null && ad != null) {
+				ret.addAnswer(q, ad);
+			}
+		}
+		
+		
+		return ret;
+	}
+	
+	private AnswerDescription findAnswerDescription(Test test, String text) {
+		AnswerDescription ret = Arrays.asList(test.getAnswerDescriptions()).stream()
+				.filter(ad -> ad.getDescription().equals(text))
+				.findAny()
+				.orElse(null);
+		
+		return ret;
+	}
+	
+	private int getKeyNumber(String key) {
+		Matcher matcher = KEY_SPLITTER_REGEX.matcher(key);
+		int ret = -1;
+		
+		if (matcher.matches()) {
+			ret = Integer.parseInt(matcher.group(1));
+		}
 		
 		return ret;
 	}
 
 	@Override
-	public void save(String test, Answer answer) {
-		// TODO Auto-generated method stub
+	public void save(Answer answer) {
+		Properties prop = new Properties();
+		prop.put(KEY_AGE, answer.getAge() + "");
+		prop.put(KEY_TIMESTAMP, answer.getTimestamp() + "");
+		prop.put(KEY_USERNAME, answer.getUser());
 		
+		Question [] questions = answer.getTest().getQuestions();
+		
+		for (int i = 0; i < questions.length; i++) {
+			String key = KEY_PREFIX_ANSWER + i;
+			AnswerDescription answerValue = answer.getAnswer(questions[i]);
+			if (answerValue != null) {
+				prop.put(key, answerValue.getDescription());
+			}
+		}
+		
+		File dir = new File(FOLDER.getAbsoluteFile() + File.separator + answer.getTest().getName());
+		dir.mkdirs();
+		File targetFile = new File(dir.getAbsolutePath() + File.separator + answer.getTimestamp() + ".properties");
+		
+		
+		try (OutputStream out = new FileOutputStream(targetFile)){
+			prop.store(out, "");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

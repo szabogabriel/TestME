@@ -2,8 +2,12 @@ package me.test.usecase.test.answer;
 
 public interface TestAnswerRequestData {
 	
-	Integer getAnswer(Integer questionNumber);
+	String getAnswer(Integer questionNumber);
 	
 	String getResponderName();
+	
+	int getResponderAge();
+	
+	String getTestName();
 
 }
