@@ -20,8 +20,8 @@ import me.test.entity.user.User;
 import me.test.servlet.viewmodel.TestVM;
 import me.test.template.TemplateLoader;
 import me.test.tools.QueryString;
-import me.test.usecase.test.answer.TestAnswerRequestData;
-import me.test.usecase.test.answer.TestAnswerResponseData;
+import me.test.usecase.answer.create.TestAnswerRequestData;
+import me.test.usecase.answer.create.TestAnswerResponseData;
 
 @WebServlet("/test")
 public class TestServlet extends BasicServlet {

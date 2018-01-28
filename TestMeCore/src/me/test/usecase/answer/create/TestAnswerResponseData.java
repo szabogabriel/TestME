@@ -1,4 +1,4 @@
-package me.test.usecase.test.answer;
+package me.test.usecase.answer.create;
 
 import me.test.entity.answer.Answer;
 
