@@ -7,12 +7,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jmtemplate.Template;
+
 import me.test.entity.user.User;
+import me.test.template.TemplateLoader;
 
 @WebServlet("/answersManagement")
 public class AnswerManagementServlet extends BasicServlet {
 
 	private static final long serialVersionUID = 5176087527841589434L;
+	
+	private static final Template TEMPLATE = TemplateLoader.INSTANCE.loadTemplate("responseManagement.template");
 
 	@Override
 	void doGetLoggedIn(HttpServletRequest request, HttpServletResponse response, User user)	throws ServletException, IOException {
