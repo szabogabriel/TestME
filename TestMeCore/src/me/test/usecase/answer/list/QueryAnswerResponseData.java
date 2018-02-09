@@ -4,7 +4,7 @@ import java.util.List;
 
 import me.test.entity.answer.Answer;
 
-public interface ListAnswerResponseData {
+public interface QueryAnswerResponseData {
 	
 	List<Answer> getAnswers();
 

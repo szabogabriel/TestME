@@ -2,6 +2,7 @@ package me.test.usecase;
 
 import me.test.entity.EntityProvider;
 import me.test.usecase.answer.create.TestAnswerUC;
+import me.test.usecase.answer.list.QueryAnswerUC;
 import me.test.usecase.test.activate.ActivateTestUC;
 import me.test.usecase.test.list.QueryTestsUC;
 import me.test.usecase.user.changepassword.ChangePasswordUC;
@@ -28,6 +29,10 @@ public class UseCaseProvider {
 	
 	public TestAnswerUC createTestAnswerUC() {
 		return new TestAnswerUC(ENTITY_PROVIDER);
+	}
+	
+	public QueryAnswerUC createQueryAnswersUC() {
+		return new QueryAnswerUC(ENTITY_PROVIDER);
 	}
 	
 	public QueryTestsUC createQueryTestsUC() {

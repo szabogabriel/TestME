@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jmtemplate.Template;
 
+import me.test.Main;
 import me.test.entity.user.User;
+import me.test.servlet.viewmodel.ResponseManagementVM;
 import me.test.template.TemplateLoader;
 
 @WebServlet("/answersManagement")
@@ -22,7 +24,11 @@ public class AnswerManagementServlet extends BasicServlet {
 	@Override
 	void doGetLoggedIn(HttpServletRequest request, HttpServletResponse response, User user)	throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		ResponseManagementVM vm = new ResponseManagementVM();
 		
+		Main.INSTANCE.getListAnswerUC().getAnswers(() -> null);
+		
+		response.getWriter().print(TEMPLATE.render(vm.provideData()));
 	}
 
 	@Override

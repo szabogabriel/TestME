@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 import me.test.entity.answer.Answer;
 
-public interface ListAnswerRequestData {
+public interface QueryAnswerRequestData {
 	
 	Predicate<Answer> getFilter();
 

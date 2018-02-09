@@ -10,6 +10,7 @@ import me.test.entity.answer.AnswersLoader;
 import me.test.entity.test.TestsFolderLoader;
 import me.test.usecase.UseCaseProvider;
 import me.test.usecase.answer.create.TestAnswerUC;
+import me.test.usecase.answer.list.QueryAnswerUC;
 import me.test.usecase.test.activate.ActivateTestUC;
 import me.test.usecase.test.list.QueryTestsUC;
 import me.test.usecase.user.create.CreateUserUC;
@@ -64,6 +65,10 @@ public class Main implements EntityProviderInitData {
 	
 	public TestAnswerUC getTestAnswerUC() {
 		return USE_CASE_PROVIDER.createTestAnswerUC();
+	}
+	
+	public QueryAnswerUC getListAnswerUC() {
+		return USE_CASE_PROVIDER.createQueryAnswersUC();
 	}
 	
 	public QueryTestsUC getQueryTestsUC() {
