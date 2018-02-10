@@ -86,8 +86,8 @@ public class AnswersFolderLoader implements AnswersLoader {
 		}
 		
 		ret.setUser(prop.getProperty(KEY_USERNAME));
-		try { ret.setAge(Integer.parseInt(prop.getProperty(KEY_AGE))); } catch (Exception e) {}
-		try { ret.setTimestamp(Long.parseLong(KEY_TIMESTAMP)); } catch (Exception e) {}
+		try { ret.setAge(Integer.parseInt(prop.getProperty(KEY_AGE))); } catch (Exception e) { e.printStackTrace(); }
+		try { ret.setTimestamp(Long.parseLong(prop.getProperty(KEY_TIMESTAMP))); } catch (Exception e) { e.printStackTrace(); }
 		ret.setTest(test);
 		
 		List<String> keys = prop.keySet().stream()

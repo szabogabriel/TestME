@@ -3,6 +3,7 @@ package me.test.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,41 +24,25 @@ public class ListServlet extends BasicServlet {
 
 	private static final long serialVersionUID = -6768181980702670687L;
 	
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
 	
 	@Override
 	void doGetLoggedIn(HttpServletRequest request, HttpServletResponse response, User user) throws ServletException, IOException {
-		response.setContentType("text/csv");
 		StringBuilder sb = new StringBuilder();
 		
-		String testName = getTestName(request);
-		
-		Test tst = Main.INSTANCE.getQueryTestsUC()
-				.getTests(() -> (t -> t.getName().equals(testName)))
-				.getTests()
-				.stream()
-				.findFirst()
-				.orElse(null);
+		Test tst = getTestByName(getTestName(request));
 		
 		if (tst != null) {
-			List<Answer> answers = null;
-			
-			Map<Test, List<Answer>> tmp = Main.INSTANCE.getListAnswerUC()
-				.getAnswers(() -> (t -> t.equals(tst)))
-				.getAnswers();
-			
-			if (tmp.containsKey(tst)) {
-				answers = tmp.get(tst);
-			}
-			
 			sb.append(createCSVHeader(tst)).append("\n");
 			
-			if (answers != null) {
-				for (Answer it : answers) {
-					sb.append(createAnswerData(it)).append("\n");
-				}
+			List<Answer> answers = getAnswers(tst);
+			for (Answer it : answers) {
+				sb.append(createAnswerData(it)).append("\n");
 			}
 		}
+		
+		response.setContentType("text/csv");
+		response.setHeader("Content-Disposition", "attachment;filename=" + ((tst != null) ? tst.getName() : "unknown") + "_" + DATE_FORMAT.format(new Date(System.currentTimeMillis())) + ".csv");
 		
 		PrintWriter pw = response.getWriter();
 		pw.println(sb.toString());
@@ -76,6 +61,33 @@ public class ListServlet extends BasicServlet {
 	@Override
 	void doPostLoggedOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.sendRedirect("index");
+	}
+	
+	private Test getTestByName(String testName) {
+		return Main.INSTANCE.getQueryTestsUC()
+				.getTests(() -> (t -> t.getName().equals(testName)))
+				.getTests()
+				.stream()
+				.findFirst()
+				.orElse(null);
+	}
+	
+	private List<Answer> getAnswers(Test test) {
+		List<Answer> answers = null;
+		
+		Map<Test, List<Answer>> tmp = Main.INSTANCE.getListAnswerUC()
+			.getAnswers(() -> (t -> t.equals(test)))
+			.getAnswers();
+		
+		if (tmp.containsKey(test)) {
+			answers = tmp.get(test);
+		}
+		
+		if (answers == null) {
+			answers = new ArrayList<>();
+		}
+		
+		return answers;
 	}
 	
 	private String createAnswerData(Answer answer) {	
