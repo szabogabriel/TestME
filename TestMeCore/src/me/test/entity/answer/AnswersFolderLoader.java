@@ -8,11 +8,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -38,8 +37,8 @@ public class AnswersFolderLoader implements AnswersLoader {
 	}
 
 	@Override
-	public Map<String, Set<Answer>> load(TestsEntity tests) {
-		Map<String, Set<Answer>> ret = new HashMap<>();
+	public Map<String, List<Answer>> load(TestsEntity tests) {
+		Map<String, List<Answer>> ret = new HashMap<>();
 		
 		Arrays.asList(FOLDER.listFiles()).stream()
 			.filter(f -> f.isDirectory() && f.exists())
@@ -60,14 +59,14 @@ public class AnswersFolderLoader implements AnswersLoader {
 	}
 	
 	@Override
-	public Set<Answer> load(Test test) {
+	public List<Answer> load(Test test) {
 		return loadAnswersForTest(new File(FOLDER.getAbsoluteFile() + File.separator + test.getName()), test);
 	}
 	
-	private Set<Answer> loadAnswersForTest(File folder, Test test) {
-		Set<Answer> ret = new HashSet<>();
+	private List<Answer> loadAnswersForTest(File folder, Test test) {
+		List<Answer> ret = new LinkedList<>();
 		
-		if (folder != null) {
+		if (folder != null && folder.isDirectory()) {
 			Arrays.asList(folder.listFiles()).stream()
 				.filter(f -> f.isFile() && f.getName().endsWith(".properties"))
 				.forEach(f -> ret.add(loadAnswer(f, test)));

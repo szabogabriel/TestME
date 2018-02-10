@@ -2,34 +2,21 @@ package me.test.servlet.viewmodel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import me.test.entity.answer.Answer;
 import me.test.entity.test.Test;
 
 public class ResponseManagementVM implements ViewModel {
 	
-	private Set<Answer> answers = new HashSet<>();
+	private Map<Test, List<Answer>> answers = new HashMap<>();
 	private String username = null;
 	
-	public void add(Answer response) {
-		answers.add(response);
-	}
-	
-	public void add(List<Answer> response) {
-		this.answers.addAll(response);
-	}
-	
-	public void remove(Test response) {
-		answers.remove(response);
-	}
-	
-	public void remove(List<Test> response) {
-		this.answers.removeAll(response);
+	public void add(Map<Test, List<Answer>> response) {
+		if (response != null) {
+			this.answers = response;
+		}
 	}
 	
 	public void setUsername(String username) {
@@ -48,23 +35,24 @@ public class ResponseManagementVM implements ViewModel {
 		return ret;
 	}
 	
-	private List<String> createTestsData() {
-		List<String> ret = new ArrayList<>();
+	private List<Map<String, Object>> createTestsData() {
+		List<Map<String, Object>> ret = new ArrayList<>();
 		
-		for (Test t : getUniqueTests()) {
-			Map<String, Object> tmp = new HashMap<>();
-			
-			
-		}
+		answers.keySet().stream()
+			.sorted((k1, k2) -> k1.getName().compareTo(k2.getName()))
+			.filter(k -> answers.get(k) != null)
+			.filter(k -> answers.get(k).size() > 0)
+			.forEach(k -> ret.add(getData(k)));
 		
 		return ret;
 	}
 	
-	private List<Test> getUniqueTests() {
-		return answers.stream().map(a -> a.getTest()).sorted((t1, t2) -> t1.getName().compareTo(t2.getName())).collect(Collectors.toList());
+	private Map<String, Object> getData(Test test) {
+		Map<String, Object> ret = new HashMap<>();
+		
+		ret.put("testName", test.getName());
+		
+		return ret;
 	}
 	
-	private List<Answer> getAnswers(Test t) {
-		return answers.stream().filter(a -> a.getTest().equals(t)).collect(Collectors.toList());
-	}
 }

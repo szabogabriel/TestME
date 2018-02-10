@@ -1,6 +1,8 @@
 package me.test.servlet;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.jmtemplate.Template;
 
 import me.test.Main;
+import me.test.entity.answer.Answer;
+import me.test.entity.test.Test;
 import me.test.entity.user.User;
 import me.test.servlet.viewmodel.ResponseManagementVM;
 import me.test.template.TemplateLoader;
@@ -26,7 +30,8 @@ public class AnswerManagementServlet extends BasicServlet {
 		// TODO Auto-generated method stub
 		ResponseManagementVM vm = new ResponseManagementVM();
 		
-		Main.INSTANCE.getListAnswerUC().getAnswers(() -> null);
+		Map<Test, List<Answer>> data = Main.INSTANCE.getListAnswerUC().getAnswers(() -> null).getAnswers();
+		vm.add(data);
 		
 		response.getWriter().print(TEMPLATE.render(vm.provideData()));
 	}

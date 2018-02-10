@@ -1,6 +1,6 @@
 package me.test.entity.answer;
 
-import java.util.Set;
+import java.util.List;
 
 import me.test.entity.test.Test;
 
@@ -17,7 +17,7 @@ public class AnswersEntity {
 		LOADER.save(answer);
 	}
 	
-	public Set<Answer> load(Test test) {
+	public List<Answer> load(Test test) {
 		return LOADER.load(test);
 	}
 	
