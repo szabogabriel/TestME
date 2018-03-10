@@ -5,6 +5,7 @@ import me.test.entity.answer.Answer;
 import me.test.entity.test.AnswerDescription;
 import me.test.entity.test.Question;
 import me.test.entity.test.Test;
+import me.test.tools.Gender;
 
 public class TestAnswerUC {
 	
@@ -21,6 +22,7 @@ public class TestAnswerUC {
 		
 		answer.setTest(test);
 		answer.setAge(data.getResponderAge());
+		answer.setGender(Gender.getGender(data.getGender()));
 		answer.setTimestamp(System.currentTimeMillis());
 		answer.setUser(data.getResponderName());
 		

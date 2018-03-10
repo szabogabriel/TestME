@@ -6,6 +6,7 @@ import java.util.Map;
 import me.test.entity.test.AnswerDescription;
 import me.test.entity.test.Question;
 import me.test.entity.test.Test;
+import me.test.tools.Gender;
 
 public class Answer {
 	
@@ -16,6 +17,8 @@ public class Answer {
 	private String userID;
 	
 	private int age;
+	
+	private Gender gender;
 	
 	private long timestamp;
 	
@@ -49,6 +52,14 @@ public class Answer {
 	
 	public int getAge() {
 		return age;
+	}
+	
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+	
+	public Gender getGender() {
+		return gender;
 	}
 	
 	public void setTimestamp(long timestamp) {

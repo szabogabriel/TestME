@@ -6,6 +6,8 @@ public interface TestAnswerRequestData {
 	
 	String getResponderName();
 	
+	String getGender();
+	
 	int getResponderAge();
 	
 	String getTestName();

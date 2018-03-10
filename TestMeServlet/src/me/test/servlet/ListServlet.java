@@ -96,6 +96,7 @@ public class ListServlet extends BasicServlet {
 		sb
 			.append(answer.getAge()).append(",")
 			.append(answer.getUser()).append(",")
+			.append(answer.getGender().toString()).append(",")
 			.append(DATE_FORMAT.format(new Date(answer.getTimestamp())));
 		
 		for (int i = 0; i < answer.getTest().getQuestions().length; i++) {
@@ -107,7 +108,7 @@ public class ListServlet extends BasicServlet {
 	
 	private String createCSVHeader(Test tst) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("age,username,timestamp");
+		sb.append("age,username,gender,timestamp");
 		for (int i = 0; i < countQuestions(tst); i++) {
 			sb.append(",question." + i);
 		}

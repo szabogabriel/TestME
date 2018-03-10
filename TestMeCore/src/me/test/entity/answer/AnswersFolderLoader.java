@@ -20,11 +20,13 @@ import me.test.entity.test.AnswerDescription;
 import me.test.entity.test.Question;
 import me.test.entity.test.Test;
 import me.test.entity.test.TestsEntity;
+import me.test.tools.Gender;
 
 public class AnswersFolderLoader implements AnswersLoader {
 	
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_AGE = "age";
+	private static final String KEY_GENDER = "gender";
 	private static final String KEY_TIMESTAMP = "timestamp";
 	private static final String KEY_PREFIX_ANSWER = "answer.";
 	
@@ -87,6 +89,7 @@ public class AnswersFolderLoader implements AnswersLoader {
 		
 		ret.setUser(prop.getProperty(KEY_USERNAME));
 		try { ret.setAge(Integer.parseInt(prop.getProperty(KEY_AGE))); } catch (Exception e) { e.printStackTrace(); }
+		try { ret.setGender(Gender.getGender(prop.getProperty(KEY_GENDER))); } catch (Exception e) { e.printStackTrace(); }
 		try { ret.setTimestamp(Long.parseLong(prop.getProperty(KEY_TIMESTAMP))); } catch (Exception e) { e.printStackTrace(); }
 		ret.setTest(test);
 		
@@ -134,6 +137,7 @@ public class AnswersFolderLoader implements AnswersLoader {
 	public void save(Answer answer) {
 		Properties prop = new Properties();
 		prop.put(KEY_AGE, answer.getAge() + "");
+		prop.put(KEY_GENDER, answer.getGender().toString());
 		prop.put(KEY_TIMESTAMP, answer.getTimestamp() + "");
 		prop.put(KEY_USERNAME, answer.getUser());
 		

@@ -19,6 +19,7 @@
 	        <form action="test" method="post">
 	          <input type="hidden" name="username" value="{{responder_name}}" />
 	          <input type="hidden" name="age" value="{{responder_age}}" />
+	          <input type="hidden" name="gender" value="{{responder_gender}}" />
 	          <input type="hidden" name="test" value="{{test_name}}" />
 		      <table class="table">
 		        {{#questions}}<tr>

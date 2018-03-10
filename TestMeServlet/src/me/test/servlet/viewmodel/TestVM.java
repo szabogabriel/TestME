@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.test.entity.test.Test;
+import me.test.tools.Gender;
 
 public class TestVM implements ViewModel {
 	
@@ -17,6 +18,7 @@ public class TestVM implements ViewModel {
 	
 	private int resp_age = -1;
 	private String resp_name = null;
+	private Gender resp_gender = null;
 	
 	public void setTest(Test test) {
 		this.test = test;
@@ -38,6 +40,10 @@ public class TestVM implements ViewModel {
 		this.resp_name = name;
 	}
 	
+	public void setRespGender(Gender gender) {
+		this.resp_gender = gender;
+	}
+	
 	@Override
 	public Map<String, Object> provideData() {
 		return getTestData();
@@ -53,6 +59,7 @@ public class TestVM implements ViewModel {
 		
 		if (resp_age != -1) ret.put("responder_age", new Integer(resp_age));
 		if (resp_name != null) ret.put("responder_name", resp_name);
+		if (resp_gender != null) ret.put("responder_gender", resp_gender.toString());
 		
 		if (test != null) {
 			ret.put("test_set", Boolean.TRUE);

@@ -11,6 +11,13 @@
         <div class="input-group">
           <input id="msg" type="text" class="form-control" name="msg" placeholder="Age">
         </div>
+        <div class="input-group">
+          <select class="form-control" name="gender" style="width:auto;">
+            <option selected disabled>Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
         <div class="radio">
           {{#tests}}<label><input type="radio" name="title" id="title" value="{{test_name}}"/>{{test_name}}</label><br/>
           {{/tests}}
