@@ -2,14 +2,20 @@ package me.test.entity.test;
 
 public class AnswerDescription {
 	
+	private final int VALUE;
 	private final String DESCRIPTION;
 	
-	public AnswerDescription(String description) {
+	public AnswerDescription(int value, String description) {
+		this.VALUE = value;
 		this.DESCRIPTION = description;
 	}
 	
 	public String getDescription() {
 		return DESCRIPTION;
+	}
+	
+	public int getValue() {
+		return VALUE;
 	}
 
 	@Override
@@ -17,6 +23,7 @@ public class AnswerDescription {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((DESCRIPTION == null) ? 0 : DESCRIPTION.hashCode());
+		result = prime * result + VALUE;
 		return result;
 	}
 
@@ -34,9 +41,11 @@ public class AnswerDescription {
 				return false;
 		} else if (!DESCRIPTION.equals(other.DESCRIPTION))
 			return false;
+		if (VALUE != other.VALUE)
+			return false;
 		return true;
 	}
-	
+
 	
 
 }

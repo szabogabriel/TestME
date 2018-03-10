@@ -1,9 +1,5 @@
 package me.test.enetity.answers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -41,16 +37,16 @@ public class AnswerFolderLoaderTest extends BasicTestClass {
 		List<Question> answerType2 = new ArrayList<>();
 		answerType2.add(q3);
 		
-		AnswerDescription ad1 = new AnswerDescription("Desc1");
-		AnswerDescription ad2 = new AnswerDescription("Desc2");
+		AnswerDescription ad1 = new AnswerDescription(1, "Desc1");
+		AnswerDescription ad2 = new AnswerDescription(2, "Desc2");
 		
 		TEST.setActive(true);
 		TEST.setQuestions(questions);
 		TEST.setAnswerDescriptions(new AnswerDescription[]{ad1, ad2});
 		TEST.setAnswerNote("Answer note");
 		TEST.setAnswerTypes(new AnswerType[]{
-				new AnswerType("AnswerType1", answerType1, "Answer type number One"),
-				new AnswerType("AnswerType2", answerType2, "Answer type number Two")
+				new AnswerType("AnswerType1", answerType1, "Answer type number One", 2.0),
+				new AnswerType("AnswerType2", answerType2, "Answer type number Two", 2.5)
 				});
 		TEST.setInstructions("Instructions");
 		TEST.setName("Test Name");

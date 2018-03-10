@@ -99,7 +99,7 @@ public class ListServlet extends BasicServlet {
 			.append(DATE_FORMAT.format(new Date(answer.getTimestamp())));
 		
 		for (int i = 0; i < answer.getTest().getQuestions().length; i++) {
-			sb.append(",").append(answer.getAnswer(answer.getTest().getQuestions()[i]).getDescription());
+			sb.append(",").append(answer.getAnswer(answer.getTest().getQuestions()[i]).getValue());
 		}
 		
 		return sb.toString();

@@ -24,6 +24,7 @@ public class TestsFolderLoader implements TestsLoader {
 	private static final String PREFIX_ANSWER_TYPE_NAME = "answerType.name.";
 	private static final String PREFIX_ANSWER_TYPE_QUESTIONS = "answerType.questions.";
 	private static final String PREFIX_ANSWER_TYPE_DESCRIPTION = "answerType.description.";
+	private static final String PREFIX_ANSWER_TYPE_LIMIT = "answerType.limit.";
 	private static final String PREFIX_QUESTION = "question.";
 	
 	private static final Pattern PATTERN_ORDER = Pattern.compile("([0-9]+)(n?)");
@@ -103,20 +104,46 @@ public class TestsFolderLoader implements TestsLoader {
 	}
 	
 	private AnswerDescription[] getAnswerDescriptions(Properties TEST_VALUES) {
-		return Arrays.asList(getIndexedValues(TEST_VALUES, PREFIX_ANSWER)).stream()
-			.map(t -> new AnswerDescription(t))
-			.toArray(AnswerDescription[]::new);
+		String [] values = getIndexedValues(TEST_VALUES, PREFIX_ANSWER);
+		AnswerDescription [] ret = new AnswerDescription[values.length];
+		
+		for (int i = 0; i < ret.length; i++) {
+			ret[i] = new AnswerDescription(getAnswerOrder(TEST_VALUES, values[i]), values[i]);
+		}
+		
+		return ret;
+	}
+	
+	private int getAnswerOrder(Properties props, String answerValue) {
+		int i = 0;
+		
+		String key;
+		
+		if (answerValue == null) {
+			return -1;
+		}
+		
+		do {
+			i++;
+			key = PREFIX_ANSWER + i;
+			if (answerValue.equals(props.getProperty(key))) {
+				return i;
+			}
+		} while (props.containsKey(key));
+		
+		return -1;
 	}
 	
 	private AnswerType[] getAnswerTypes(Properties TEST_VALUES, Question[] questions) {
 		String[] names = getIndexedValues(TEST_VALUES, PREFIX_ANSWER_TYPE_NAME);
 		String[] quess = getIndexedValues(TEST_VALUES, PREFIX_ANSWER_TYPE_QUESTIONS);
 		String[] descs = getIndexedValues(TEST_VALUES, PREFIX_ANSWER_TYPE_DESCRIPTION);
+		String[] limits = getIndexedValues(TEST_VALUES, PREFIX_ANSWER_TYPE_LIMIT);
 		
 		AnswerType[] ret = new AnswerType[names.length];
 		
 		for (int i = 0; i < ret.length; i++) {
-			ret[i] = new AnswerType(names[i], getQuestions(questions, quess[i]), descs[i]);
+			ret[i] = new AnswerType(names[i], getQuestions(questions, quess[i]), descs[i], Double.parseDouble(limits[i]));
 		}
 		
 		return ret;

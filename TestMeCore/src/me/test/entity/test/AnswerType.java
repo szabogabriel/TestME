@@ -10,10 +10,13 @@ public class AnswerType {
 	
 	private final String DESCRIPTION;
 	
-	public AnswerType(String name, List<Question> questions, String description) {
+	private final double LIMIT;
+	
+	public AnswerType(String name, List<Question> questions, String description, double limit) {
 		this.NAME = name;
 		this.QUESTION = questions;
 		this.DESCRIPTION = description;
+		this.LIMIT = limit;
 	}
 	
 	public String getName() {
@@ -26,6 +29,10 @@ public class AnswerType {
 	
 	public String getDescription() {
 		return DESCRIPTION;
+	}
+	
+	public double getLimit() {
+		return LIMIT;
 	}
 
 }
