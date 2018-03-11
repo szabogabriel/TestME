@@ -68,6 +68,10 @@ public class Test {
 		this.answerDescriptions = descriptions;
 	}
 	
+	public int getMaxAnswerValue() {
+		return this.answerDescriptions.length;
+	}
+	
 	public String getAnswerNote() {
 		return answerNote;
 	}

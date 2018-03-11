@@ -80,7 +80,11 @@ public class Answer {
 			Question[] questions = getTest().getQuestions(it.getName());
 			double avg = 0;
 			for (Question it2 : questions) {
-				avg += (double)getAnswer(it2).getValue();
+				double toAdd = (double)getAnswer(it2).getValue();
+				if (it2.isNegative()) {
+					toAdd = ((double)test.getMaxAnswerValue()) - toAdd + 1; 
+				}
+				avg += toAdd;
 			}
 			avg /= (double)questions.length;
 			if (avg > it.getLimit()) {

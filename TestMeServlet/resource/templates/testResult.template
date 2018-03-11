@@ -8,8 +8,8 @@
 	{{/isMessage}}
 
     {{#studentType}}
-    <h2>{{typeName}}<h2>
-    <p>{{typeDesc}}</p>
+    <h1>{{typeName}}</h1>
+    <p>{{{typeDesc}}}</p>
     {{/studentType}}
     
 {{>page_end.template}}

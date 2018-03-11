@@ -74,7 +74,7 @@ public class TestsFolderLoader implements TestsLoader {
 				
 				ret.setAnswerDescriptions(getAnswerDescriptions(TEST_VALUES));
 				
-				ret.setQuestions(getQuestions(TEST_VALUES, ret.getAnswerTypes()));
+				ret.setQuestions(getQuestions(TEST_VALUES));
 				
 				ret.setAnswerTypes(getAnswerTypes(TEST_VALUES, ret.getQuestions()));
 				
@@ -92,12 +92,29 @@ public class TestsFolderLoader implements TestsLoader {
 		return ret;
 	}
 	
-	private Question[] getQuestions(Properties TEST_VALUES, AnswerType[] answerTypes) {
+	private boolean isNegativeQuestion(Properties TEST_VALUES, int id) {
+		String [] values = getIndexedValues(TEST_VALUES, PREFIX_ANSWER_TYPE_QUESTIONS);
+		
+		String toLookFor = id + "n";
+		
+		for (String it1 : values) {
+			String [] tmp = it1.split(",");
+			for (String it2 : tmp) {
+				if (it2.equals(toLookFor)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	private Question[] getQuestions(Properties TEST_VALUES) {
 		String [] questions = getIndexedValues(TEST_VALUES, PREFIX_QUESTION);
 		Question[] ret = new Question[questions.length];
 		
 		for (int i = 0; i < questions.length; i++) {
-			ret[i] = new Question(i, questions[i]);
+			ret[i] = new Question(i, questions[i], isNegativeQuestion(TEST_VALUES, i + 1));
 		}
 		
 		return ret;
@@ -157,7 +174,8 @@ public class TestsFolderLoader implements TestsLoader {
 			for (String it : values) {
 				Matcher m = PATTERN_ORDER.matcher(it);
 				if (m.matches()) {
-					ret.add(questions[Integer.parseInt(m.group(1)) - 1]);
+					Question q = questions[Integer.parseInt(m.group(1)) - 1];
+					ret.add(q);
 				}
 			}
 			

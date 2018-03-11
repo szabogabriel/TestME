@@ -25,9 +25,9 @@ public class AnswerFolderLoaderTest extends BasicTestClass {
 	public static void prepareClass() {
 		prepareAnswersFolder();
 		
-		Question q1 = new Question(0, "Question1");
-		Question q2 = new Question(1, "Question2");
-		Question q3 = new Question(2, "Question3");
+		Question q1 = new Question(0, "Question1", false);
+		Question q2 = new Question(1, "Question2", true);
+		Question q3 = new Question(2, "Question3", false);
 		Question[] questions = new Question[]{q1, q2, q3};
 		
 		List<Question> answerType1 = new ArrayList<>();

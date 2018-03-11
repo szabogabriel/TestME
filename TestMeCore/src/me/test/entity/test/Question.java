@@ -4,10 +4,12 @@ public class Question {
 	
 	private final int ID;
 	private final String TEXT;
+	private final boolean NEGATIVE;
 	
-	public Question(int ID, String text) {
+	public Question(int ID, String text, boolean isNegative) {
 		this.ID = ID;
 		this.TEXT = text;
+		this.NEGATIVE = isNegative;
 	}
 	
 	public String getText() {
@@ -16,6 +18,10 @@ public class Question {
 	
 	public int getId() {
 		return ID;
+	}
+	
+	public boolean isNegative() {
+		return NEGATIVE;
 	}
 
 	@Override
@@ -39,7 +45,5 @@ public class Question {
 			return false;
 		return true;
 	}
-	
-	
 	
 }
