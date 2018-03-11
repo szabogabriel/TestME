@@ -26,6 +26,7 @@ public class TestAnswerUC {
 		answer.setGender(Gender.getGender(data.getGender()));
 		answer.setTimestamp(System.currentTimeMillis());
 		answer.setUser(data.getResponderName());
+		answer.setDescription(test.getActiveDescription());
 		
 		Question[] questions = test.getQuestions();
 		

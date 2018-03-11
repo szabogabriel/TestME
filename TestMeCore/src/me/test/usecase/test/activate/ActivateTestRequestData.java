@@ -6,4 +6,6 @@ public interface ActivateTestRequestData {
 	
 	Set<String> getTestCasesName();
 	
+	String getDescription(String testName);
+	
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,10 +33,12 @@ public class ListServlet extends BasicServlet {
 		
 		Test tst = getTestByName(getTestName(request));
 		
+		String desc = getAnswerDescription(request);
+		
 		if (tst != null) {
 			sb.append(createCSVHeader(tst)).append("\n");
 			
-			List<Answer> answers = getAnswers(tst);
+			List<Answer> answers = getAnswers(tst, desc);
 			for (Answer it : answers) {
 				String toAdd = createAnswerData(it);
 				if (toAdd != null) {
@@ -44,8 +47,17 @@ public class ListServlet extends BasicServlet {
 			}
 		}
 		
+		StringBuilder fileName = new StringBuilder();
+		fileName
+			.append((tst != null) ? tst.getName() : "unknown")
+			.append((desc != null) ? desc : "")
+			.append("_")
+			.append(DATE_FORMAT.format(new Date(System.currentTimeMillis())))
+			.append(".csv")
+			;
+		
 		response.setContentType("text/csv");
-		response.setHeader("Content-Disposition", "attachment;filename=" + ((tst != null) ? tst.getName() : "unknown") + "_" + DATE_FORMAT.format(new Date(System.currentTimeMillis())) + ".csv");
+		response.setHeader("Content-Disposition", "attachment;filename=" + fileName.toString());
 		
 		PrintWriter pw = response.getWriter();
 		pw.println(sb.toString());
@@ -75,12 +87,12 @@ public class ListServlet extends BasicServlet {
 				.orElse(null);
 	}
 	
-	private List<Answer> getAnswers(Test test) {
+	private List<Answer> getAnswers(Test test, String desc) {
 		List<Answer> answers = null;
 		
 		Map<Test, List<Answer>> tmp = Main.INSTANCE.getListAnswerUC()
-			.getAnswers(() -> (t -> t.equals(test)))
-			.getAnswers();
+				.getAnswers(() -> (t -> t.equals(test)))
+				.getAnswers(); 
 		
 		if (tmp.containsKey(test)) {
 			answers = tmp.get(test);
@@ -90,7 +102,11 @@ public class ListServlet extends BasicServlet {
 			answers = new ArrayList<>();
 		}
 		
-		return answers;
+		if (desc != null) {
+			return answers.stream().filter(a -> a.getDescription().equals(desc)).collect(Collectors.toList());
+		} else {
+			return answers;
+		}
 	}
 	
 	private String createAnswerData(Answer answer) {
@@ -134,6 +150,11 @@ public class ListServlet extends BasicServlet {
 	private String getTestName(HttpServletRequest request) {
 		QueryString qs = new QueryString(request.getQueryString());
 		return qs.getValue("test");
+	}
+	
+	private String getAnswerDescription(HttpServletRequest request) {
+		QueryString qs = new QueryString(request.getQueryString());
+		return qs.getValue("desc");
 	}
 
 }

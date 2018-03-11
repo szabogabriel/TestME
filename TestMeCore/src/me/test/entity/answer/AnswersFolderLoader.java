@@ -29,6 +29,7 @@ public class AnswersFolderLoader implements AnswersLoader {
 	private static final String KEY_GENDER = "gender";
 	private static final String KEY_TIMESTAMP = "timestamp";
 	private static final String KEY_PREFIX_ANSWER = "answer.";
+	private static final String KEY_DESCRIPTION = "description";
 	
 	private static final Pattern KEY_SPLITTER_REGEX = Pattern.compile("answer.([0-9]+)");
 	
@@ -91,6 +92,7 @@ public class AnswersFolderLoader implements AnswersLoader {
 		try { ret.setAge(Integer.parseInt(prop.getProperty(KEY_AGE))); } catch (Exception e) { e.printStackTrace(); }
 		try { ret.setGender(Gender.getGender(prop.getProperty(KEY_GENDER))); } catch (Exception e) { e.printStackTrace(); }
 		try { ret.setTimestamp(Long.parseLong(prop.getProperty(KEY_TIMESTAMP))); } catch (Exception e) { e.printStackTrace(); }
+		ret.setDescription(prop.getProperty(KEY_DESCRIPTION, ""));
 		ret.setTest(test);
 		
 		List<String> keys = prop.keySet().stream()
@@ -140,6 +142,7 @@ public class AnswersFolderLoader implements AnswersLoader {
 		prop.put(KEY_GENDER, answer.getGender().toString());
 		prop.put(KEY_TIMESTAMP, answer.getTimestamp() + "");
 		prop.put(KEY_USERNAME, answer.getUser());
+		prop.put(KEY_DESCRIPTION, answer.getDescription());
 		
 		Question [] questions = answer.getTest().getQuestions();
 		

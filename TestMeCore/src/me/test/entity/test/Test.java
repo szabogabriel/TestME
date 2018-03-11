@@ -18,6 +18,7 @@ public class Test {
 	private AnswerDescription[] answerDescriptions = null;
 	
 	private boolean isActive = false;
+	private String activeDescription = null;
 	
 	public Test() {
 		name = "";
@@ -100,6 +101,14 @@ public class Test {
 	
 	public boolean isActive() {
 		return isActive;
+	}
+	
+	public void setActiveDescription(String desc) {
+		activeDescription = desc;
+	}
+	
+	public String getActiveDescription() {
+		return activeDescription;
 	}
 
 	@Override

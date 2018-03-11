@@ -1,7 +1,5 @@
 package me.test.usecase.test.activate;
 
-import java.util.stream.Collectors;
-
 import me.test.entity.EntityProvider;
 import me.test.entity.test.TestsEntity;
 
@@ -19,7 +17,7 @@ public class ActivateTestUC {
 			
 			te.deactivate();
 			
-			te.activate(request.getTestCasesName().stream().map(t -> te.getTestByName(t)).collect(Collectors.toList()));
+			request.getTestCasesName().stream().map(t -> te.getTestByName(t)).forEach(t -> te.activate(t, request.getDescription(t.getName())));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return () -> Boolean.FALSE;

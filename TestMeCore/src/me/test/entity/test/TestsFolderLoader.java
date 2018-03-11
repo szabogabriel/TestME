@@ -79,6 +79,8 @@ public class TestsFolderLoader implements TestsLoader {
 				ret.setAnswerTypes(getAnswerTypes(TEST_VALUES, ret.getQuestions()));
 				
 				ret.setActive(isActive(ret));
+				
+				ret.setActiveDescription(getActiveNote(ret));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -88,7 +90,20 @@ public class TestsFolderLoader implements TestsLoader {
 	}
 	
 	private boolean isActive(Test test) {
-		boolean ret = !IOUtils.readFilesByLine(ACTIVE_FILE).stream().noneMatch(l -> l.trim().equals(test.getName()));
+		boolean ret = !IOUtils.readFilesByLine(ACTIVE_FILE).stream().noneMatch(l -> l.trim().startsWith(test.getName()));
+		return ret;
+	}
+	
+	private String getActiveNote(Test test) {
+		String ret = "";
+		if (isActive(test)) {
+			List<String> tmp = IOUtils.readFilesByLine(ACTIVE_FILE);
+			for (String it : tmp) {
+				if (it.startsWith(test.getName())) {
+					ret = it.substring(test.getName().length()).trim();
+				}
+			}
+		}
 		return ret;
 	}
 	
@@ -206,21 +221,19 @@ public class TestsFolderLoader implements TestsLoader {
 	
 	@Override
 	public void persist(Test test) {
-		// TODO save test
-		
 		List<String> activeFileContent = IOUtils.readFilesByLine(ACTIVE_FILE);
 		boolean contains = false;
 		for (String line : activeFileContent) { 
-			if (line.trim().equals(test.getName())) {
+			if (line.trim().startsWith(test.getName())) {
 				contains = true; 
 			}
 		}
 		
 		if (contains && !test.isActive()) {
-			IOUtils.writeFile(ACTIVE_FILE, activeFileContent.stream().filter(l -> !l.trim().equals(test.getName())).collect(Collectors.toList()));
+			IOUtils.writeFile(ACTIVE_FILE, activeFileContent.stream().filter(l -> !l.trim().startsWith(test.getName())).collect(Collectors.toList()));
 		} else
 		if (!contains && test.isActive()) {
-			activeFileContent.add(test.getName());
+			activeFileContent.add(test.getName() + " " + (test.getActiveDescription() == null ? "" : test.getActiveDescription()));
 			IOUtils.writeFile(ACTIVE_FILE, activeFileContent);
 		}
 	}

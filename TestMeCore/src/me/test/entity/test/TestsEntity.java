@@ -40,6 +40,12 @@ public class TestsEntity {
 		LOADER.persist(test);
 	}
 	
+	public void activate(Test test, String description) {
+		test.setActive(true);
+		test.setActiveDescription(description);
+		LOADER.persist(test);
+	}
+	
 	public void activate(List<Test> tests) {
 		tests.stream().forEach(t -> activate(t));
 	}

@@ -5,11 +5,18 @@
     
     <div class="col-md-offset-4 col-md-4">
       <form action="testsManagement" method="post">
+        <table>
+          <tr><th>Test</th><th>Description</th></tr>
         {{#tests}}
-	        <div class="checkbox">
-	          <label><input type="checkbox" name="{{test_name}}" {{#test_active}} checked="on"{{/test_active}}/>{{test_name}}</label><br/>
-	        </div>
+          <tr>
+            <td><div class="checkbox">
+	          <label><input type="checkbox" name="{{test_name}}_testkey" {{#test_active}} checked="on"{{/test_active}}/>{{test_name}}</label><br/>
+	        </div></td>
+	        <td>
+	          <input type="text" name="{{test_name}}_desckey" value="{{test_desc}}" />
+	        </td>
         {{/tests}}
+        </table>
         <button type="submit" class="btin btn-default">Update</button>
       </form>
     </div>

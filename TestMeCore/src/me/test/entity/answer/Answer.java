@@ -21,6 +21,8 @@ public class Answer {
 	
 	private Gender gender;
 	
+	private String description;
+	
 	private long timestamp;
 	
 	public void setTest(Test test) {
@@ -77,6 +79,14 @@ public class Answer {
 	
 	public long getTimestamp() {
 		return timestamp;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		return description;
 	}
 	
 	public AnswerType[] getAnswerDescriptionsByAnswers() {

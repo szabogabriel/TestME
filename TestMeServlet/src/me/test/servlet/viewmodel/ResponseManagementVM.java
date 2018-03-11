@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import me.test.entity.answer.Answer;
 import me.test.entity.test.Test;
@@ -51,6 +52,20 @@ public class ResponseManagementVM implements ViewModel {
 		Map<String, Object> ret = new HashMap<>();
 		
 		ret.put("testName", test.getName());
+		ret.put("descs", getDescs(test));
+		
+		return ret;
+	}
+	
+	private List<Map<String, Object>> getDescs(Test test) {
+		List<Map<String, Object>> ret = new ArrayList<>();
+		
+		List<String> descriptions = answers.get(test).stream().map(a -> a.getDescription()).sorted().distinct().collect(Collectors.toList());
+		for (String it: descriptions) {
+			Map<String, Object> tmp = new HashMap<>();
+			tmp.put("descName", it);
+			ret.add(tmp);
+		}
 		
 		return ret;
 	}

@@ -75,6 +75,7 @@ public class TestManagementVM implements ViewModel {
 		
 		ret.put("test_name", test.getName());
 		ret.put("test_active", activeTests.contains(test));
+		ret.put("test_desc", test.getActiveDescription());
 		
 		return ret;
 	}

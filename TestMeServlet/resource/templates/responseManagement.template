@@ -4,10 +4,20 @@
     <h2>Select test to export</h2>
     
     <div class="col-md-offset-4 col-md-4">
+      <table border="1">
+        <tr><th>Tests</th><th>Description</th></tr>
         {{#tests}}
+          <tr>
+            <td>
 	          <a href="exportTest?test={{testName}}">{{testName}}</a>
+	        </td>
+	        <td>
+	        {{#descs}}
+	          <a href="exportTest?test={{testName}}&desc={{descName}}">Description: {{descName}}</a><br/>
+	        {{/descs}}
+	        </td>
         {{/tests}}
-      </form>
+      </table>
     </div>
     
 {{>page_end.template}}

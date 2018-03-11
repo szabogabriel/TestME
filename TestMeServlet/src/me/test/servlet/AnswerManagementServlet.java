@@ -27,7 +27,6 @@ public class AnswerManagementServlet extends BasicServlet {
 
 	@Override
 	void doGetLoggedIn(HttpServletRequest request, HttpServletResponse response, User user)	throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		ResponseManagementVM vm = new ResponseManagementVM();
 		
 		Map<Test, List<Answer>> data = Main.INSTANCE.getListAnswerUC().getAnswers(() -> null).getAnswers();
@@ -43,7 +42,6 @@ public class AnswerManagementServlet extends BasicServlet {
 
 	@Override
 	void doPostLoggedIn(HttpServletRequest request, HttpServletResponse response, User user) throws ServletException, IOException {
-		// TODO Handle request of the answers.
 		response.sendRedirect("index");
 	}
 
