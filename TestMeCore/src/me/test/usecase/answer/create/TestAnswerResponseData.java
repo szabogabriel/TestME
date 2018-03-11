@@ -1,9 +1,11 @@
 package me.test.usecase.answer.create;
 
-import me.test.entity.answer.Answer;
+import me.test.entity.test.AnswerType;
 
 public interface TestAnswerResponseData {
 	
-	Answer getResponseId();
+	boolean isTestFilledCorrectly();
+	
+	AnswerType[] getDescriptions();
 
 }

@@ -1,0 +1,15 @@
+{{>page_start.template}}
+{{>page_menu.template}}
+
+    {{#isMessage}}
+        <div class="alert {{#isDanger}}alert-danger{{/isDanger}}{{#isSuccess}}alert-success{{/isSuccess}}" roler="alert">
+            {{#isDanger}}<string>!!! </strong>{{/isDanger}}{{message}}
+	    </div>
+	{{/isMessage}}
+
+    {{#studentType}}
+    <h2>{{typeName}}<h2>
+    <p>{{typeDesc}}</p>
+    {{/studentType}}
+    
+{{>page_end.template}}

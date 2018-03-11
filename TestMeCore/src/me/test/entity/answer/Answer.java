@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.test.entity.test.AnswerDescription;
+import me.test.entity.test.AnswerType;
 import me.test.entity.test.Question;
 import me.test.entity.test.Test;
 import me.test.tools.Gender;
@@ -68,6 +69,40 @@ public class Answer {
 	
 	public long getTimestamp() {
 		return timestamp;
+	}
+	
+	public AnswerType[] getAnswerDescriptionsByAnswers() {
+		final Map<AnswerType, Double> tmp = new HashMap<>();
+		
+		AnswerType[] answerTypes = getTest().getAnswerTypes();
+		
+		for (AnswerType it : answerTypes) {
+			Question[] questions = getTest().getQuestions(it.getName());
+			double avg = 0;
+			for (Question it2 : questions) {
+				avg += (double)getAnswer(it2).getValue();
+			}
+			avg /= (double)questions.length;
+			if (avg > it.getLimit()) {
+				tmp.put(it, avg - it.getLimit());
+			}
+		}
+		
+		AnswerType[] ret = tmp.keySet().stream().sorted((k1, k2) -> (tmp.get(k1) < tmp.get(k2) ? -1 : 1)).toArray(AnswerType[]::new);
+		
+		return ret;
+	}
+	
+	public boolean isAnswerCorrect() {
+		Question[] questions = test.getQuestions();
+		
+		for (Question it : questions) {
+			if (answers.get(it) == null) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 }

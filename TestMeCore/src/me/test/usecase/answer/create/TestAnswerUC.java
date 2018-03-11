@@ -3,6 +3,7 @@ package me.test.usecase.answer.create;
 import me.test.entity.EntityProvider;
 import me.test.entity.answer.Answer;
 import me.test.entity.test.AnswerDescription;
+import me.test.entity.test.AnswerType;
 import me.test.entity.test.Question;
 import me.test.entity.test.Test;
 import me.test.tools.Gender;
@@ -32,11 +33,13 @@ public class TestAnswerUC {
 			answer.addAnswer(questions[i], getDescription(test.getAnswerDescriptions(), data.getAnswer(i)));
 		}
 		
-		ENTITY_PROVIDER.getAnswersEntity().save(answer);
+		if (answer.isAnswerCorrect()) {
+			ENTITY_PROVIDER.getAnswersEntity().save(answer);
+		}
 		
-		return () -> answer;
+		return new TestAnswerResponseDataImpl(answer);
 	}
-	
+
 	private AnswerDescription getDescription(AnswerDescription[] descriptions, String text) {
 		for (AnswerDescription it : descriptions) {
 			if (it.getDescription().equals(text)) {
@@ -44,6 +47,33 @@ public class TestAnswerUC {
 			}
 		}
 		return null;
+	}
+	
+	private class TestAnswerResponseDataImpl implements TestAnswerResponseData {
+		
+		private final boolean filledCorrectly;
+		private final AnswerType[] descriptions;
+		
+		public TestAnswerResponseDataImpl(Answer answer) {
+			if (answer.isAnswerCorrect()) {
+				filledCorrectly = true;
+				descriptions = answer.getAnswerDescriptionsByAnswers();
+			} else {
+				filledCorrectly = false;
+				descriptions = new AnswerType[] {};
+			}
+		}
+		
+		@Override
+		public boolean isTestFilledCorrectly() {
+			return filledCorrectly;
+		}
+
+		@Override
+		public AnswerType[] getDescriptions() {
+			return descriptions;
+		}
+		
 	}
 
 }

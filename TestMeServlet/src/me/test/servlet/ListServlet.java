@@ -37,7 +37,10 @@ public class ListServlet extends BasicServlet {
 			
 			List<Answer> answers = getAnswers(tst);
 			for (Answer it : answers) {
-				sb.append(createAnswerData(it)).append("\n");
+				String toAdd = createAnswerData(it);
+				if (toAdd != null) {
+					sb.append(toAdd).append("\n");
+				}
 			}
 		}
 		
@@ -90,17 +93,20 @@ public class ListServlet extends BasicServlet {
 		return answers;
 	}
 	
-	private String createAnswerData(Answer answer) {	
+	private String createAnswerData(Answer answer) {
 		StringBuilder sb = new StringBuilder();
-		
-		sb
-			.append(answer.getAge()).append(",")
-			.append(answer.getUser()).append(",")
-			.append(answer.getGender().toString()).append(",")
-			.append(DATE_FORMAT.format(new Date(answer.getTimestamp())));
-		
-		for (int i = 0; i < answer.getTest().getQuestions().length; i++) {
-			sb.append(",").append(answer.getAnswer(answer.getTest().getQuestions()[i]).getValue());
+		try {
+			sb
+				.append(answer.getAge()).append(",")
+				.append(answer.getUser()).append(",")
+				.append(answer.getGender().toString()).append(",")
+				.append(DATE_FORMAT.format(new Date(answer.getTimestamp())));
+			
+			for (int i = 0; i < answer.getTest().getQuestions().length; i++) {
+				sb.append(",").append(answer.getAnswer(answer.getTest().getQuestions()[i]).getValue());
+			}
+		} catch (Exception e) {
+			return null;
 		}
 		
 		return sb.toString();

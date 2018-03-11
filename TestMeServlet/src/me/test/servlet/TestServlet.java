@@ -15,19 +15,23 @@ import javax.servlet.http.HttpServletResponse;
 import com.jmtemplate.Template;
 
 import me.test.Main;
+import me.test.entity.test.AnswerType;
 import me.test.entity.test.Test;
 import me.test.entity.user.User;
+import me.test.servlet.viewmodel.TestPostVM;
 import me.test.servlet.viewmodel.TestVM;
 import me.test.template.TemplateLoader;
 import me.test.tools.Gender;
 import me.test.tools.QueryString;
 import me.test.usecase.answer.create.TestAnswerRequestData;
+import me.test.usecase.answer.create.TestAnswerResponseData;
 
 @WebServlet("/test")
 public class TestServlet extends BasicServlet {
 	private static final long serialVersionUID = -4692692000699899245L;
 	
 	private static final Template TEMPLATE = TemplateLoader.INSTANCE.loadTemplate("test.template");
+	private static final Template TEMPLATE_POST = TemplateLoader.INSTANCE.loadTemplate("testResult.template");
 
 	public TestServlet() {
         super();
@@ -67,8 +71,8 @@ public class TestServlet extends BasicServlet {
 		
 		QueryString qs = new QueryString(request.getQueryString());
 		
-		viewModel.setResponserAge(Integer.parseInt(getResponderAge(qs)));
-		viewModel.setRespName(getResponderName(qs));
+		try { viewModel.setResponserAge(Integer.parseInt(getResponderAge(qs))); } catch (Exception e) { viewModel.setResponserAge(0); } 
+		try { viewModel.setRespName(getResponderName(qs)); } catch (Exception e) { viewModel.setRespName(""); }
 		viewModel.setRespGender(Gender.getGender(getResponderGender(qs)));
 		
 		Test test = getTest(qs);
@@ -81,31 +85,58 @@ public class TestServlet extends BasicServlet {
 	}
 	
 	private String getResponderAge(QueryString qs) throws UnsupportedEncodingException {
-		return URLDecoder.decode(qs.getValue("msg"), "UTF-8");
+		return URLDecoder.decode(readFromQueryString(qs, "msg"), "UTF-8");
 	}
 	
 	private String getResponderName(QueryString qs) throws UnsupportedEncodingException {
-		return URLDecoder.decode(qs.getValue("email"), "UTF-8");
+		return URLDecoder.decode(readFromQueryString(qs, "email"), "UTF-8");
 	}
 	
 	private String getResponderGender(QueryString qs) throws UnsupportedEncodingException {
-		return URLDecoder.decode(qs.getValue("gender"), "UTF-8");
+		return URLDecoder.decode(readFromQueryString(qs, "gender"), "UTF-8");
+	}
+	
+	private String readFromQueryString(QueryString qs, String value) {
+		String ret = qs.getValue(value);
+		if (ret == null) {
+			ret = "";
+		}
+		return ret;
 	}
 	
 	@Override
 	protected void doPostLoggedIn(HttpServletRequest request, HttpServletResponse response, User user) throws ServletException, IOException {
-		doPostLoggedOut(request, response);
+		doPostCommonStuff(request, response, true, user.getUsername());
 	}
 
 	@Override
 	protected void doPostLoggedOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPostCommonStuff(request, response, false, null);
+	}
+	
+	private void doPostCommonStuff(HttpServletRequest request, HttpServletResponse response, boolean loggedIn, String user) throws ServletException, IOException {
 		Map<String, String[]> params = request.getParameterMap();
 		
-//		TestAnswerResponseData resp = 
-				Main.INSTANCE.getTestAnswerUC().publishAnswer(new TestAnswerRequestDataImpl(params));
+		TestAnswerResponseData resp = Main.INSTANCE.getTestAnswerUC().publishAnswer(new TestAnswerRequestDataImpl(params));
 		
-		response.sendRedirect("index");
+		TestPostVM data = new TestPostVM();
 		
+		if (resp.isTestFilledCorrectly()) {
+			AnswerType[] answerTypes = resp.getDescriptions();
+			data.addAnswerTypes(answerTypes);
+			data.setSuccess();
+			data.setMessage("Thanks for filling our test." + ((answerTypes.length == 0) ? " Sorry, there is no specific outcome for you..." : " Here are the specifications for you."));
+		} else {
+			data.setMessage("Test was not filled correctly.");
+			data.setDanger();
+		}
+		
+		data.setLoggedIn(loggedIn);
+		if (loggedIn) {
+			data.setUsername(user);
+		}
+		
+		response.getWriter().append(TEMPLATE_POST.render(data.provideData()));
 	}
 	
 	private class TestAnswerRequestDataImpl implements TestAnswerRequestData {
