@@ -103,7 +103,7 @@ public class ListServlet extends BasicServlet {
 				.append(DATE_FORMAT.format(new Date(answer.getTimestamp())));
 			
 			for (int i = 0; i < answer.getTest().getQuestions().length; i++) {
-				sb.append(",").append(answer.getAnswer(answer.getTest().getQuestions()[i]).getValue());
+				sb.append(",").append(answer.getAnswerValue(answer.getTest().getQuestions()[i]) + "");
 			}
 		} catch (Exception e) {
 			return null;
@@ -116,7 +116,7 @@ public class ListServlet extends BasicServlet {
 		StringBuilder sb = new StringBuilder();
 		sb.append("age,username,gender,timestamp");
 		for (int i = 0; i < countQuestions(tst); i++) {
-			sb.append(",question." + i);
+			sb.append(",question." + (i + 1));
 		}
 		return sb.toString();
 	}

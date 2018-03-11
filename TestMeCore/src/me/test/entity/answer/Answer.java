@@ -39,6 +39,14 @@ public class Answer {
 		return answers.get(question);
 	}
 	
+	public int getAnswerValue(Question question) {
+		int ret = getAnswer(question).getValue();
+		if (question.isNegative()) {
+			ret = test.getMaxAnswerValue() - ret + 1; 
+		}
+		return ret;
+	}
+	
 	public void setUser(String user) {
 		this.userID = user;
 	}
@@ -80,11 +88,7 @@ public class Answer {
 			Question[] questions = getTest().getQuestions(it.getName());
 			double avg = 0;
 			for (Question it2 : questions) {
-				double toAdd = (double)getAnswer(it2).getValue();
-				if (it2.isNegative()) {
-					toAdd = ((double)test.getMaxAnswerValue()) - toAdd + 1; 
-				}
-				avg += toAdd;
+				avg += (double)getAnswerValue(it2);
 			}
 			avg /= (double)questions.length;
 			if (avg > it.getLimit()) {
